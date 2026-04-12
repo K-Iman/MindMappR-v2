@@ -113,8 +113,105 @@ body {
     box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
 
+/* --- Desktop Default (Hide Mobile Elements) --- */
+.mobile-menu-btn {
+    display: none;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+}
+.mobile-sidebar {
+    display: none;
+}
+.mobile-overlay {
+    display: none;
+}
+
+/* --- Responsive Layout (Mobile/Tablet) --- */
 @media (max-width: 768px) {
-    .nav-links {
-        display: none; /* Hide on extremely small layouts */
+    .nav-links, .desktop-only {
+        display: none !important;
+    }
+    
+    .mobile-menu-btn {
+        display: flex;
+    }
+    
+    .mobile-overlay {
+        display: block;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1001;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    
+    .mobile-overlay.open {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .mobile-sidebar {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0; right: 0;
+        width: 250px;
+        height: 100vh;
+        background-color: var(--bg-color);
+        z-index: 1002;
+        box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
+        transform: translateX(100%);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        padding: 1.5rem;
+    }
+
+    .mobile-sidebar.open {
+        transform: translateX(0);
+    }
+    
+    .mobile-sidebar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+    
+    .mobile-nav-links {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        flex-grow: 1;
+    }
+    
+    .mobile-nav-link {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 1.1rem;
+        transition: color 0.2s ease;
+    }
+
+    .mobile-nav-link:hover, .mobile-nav-link:active {
+        color: var(--accent-primary);
+    }
+    
+    .mobile-greeting {
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+        display: block;
+    }
+    
+    .mobile-nav-actions {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--surface-border);
     }
 }

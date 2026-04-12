@@ -32,4 +32,34 @@ document.addEventListener("DOMContentLoaded", () => {
         const moonIcon = `<svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>`;
         themeToggle.innerHTML = theme === "dark" ? sunIcon : moonIcon;
     }
+
+    // Mobile Navigation Toggle Logic
+    const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+    const mobileCloseBtn = document.getElementById("mobileCloseBtn");
+    const mobileSidebar = document.getElementById("mobileSidebar");
+    const mobileOverlay = document.getElementById("mobileOverlay");
+    const mobileLinks = document.querySelectorAll(".mobile-nav-link");
+
+    function closeMobileMenu() {
+        if (mobileSidebar) mobileSidebar.classList.remove("open");
+        if (mobileOverlay) mobileOverlay.classList.remove("open");
+    }
+
+    function openMobileMenu() {
+        if (mobileSidebar) mobileSidebar.classList.add("open");
+        if (mobileOverlay) mobileOverlay.classList.add("open");
+    }
+
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener("click", openMobileMenu);
+    }
+    if (mobileCloseBtn) {
+        mobileCloseBtn.addEventListener("click", closeMobileMenu);
+    }
+    if (mobileOverlay) {
+        mobileOverlay.addEventListener("click", closeMobileMenu);
+    }
+    mobileLinks.forEach(link => {
+        link.addEventListener("click", closeMobileMenu);
+    });
 });

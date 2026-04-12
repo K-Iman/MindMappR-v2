@@ -41,60 +41,18 @@
                 </button>
                 
                 {% if user.is_authenticated %}
-                    <div class="desktop-only" style="display: flex; align-items: center;">
-                        <span style="font-weight: 500; font-size: 0.95rem; margin-right: 0.5rem; color: var(--text-primary);">{{ user.username }}</span>
-                        <form action="{% url 'accounts:logout' %}" method="post" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Logout</button>
-                        </form>
-                    </div>
+                    <span style="font-weight: 500; font-size: 0.95rem; margin-right: 0.5rem; color: var(--text-primary);">{{ user.username }}</span>
+                    <form action="{% url 'accounts:logout' %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Logout</button>
+                    </form>
                 {% else %}
-                    <div class="desktop-only" style="display: flex; align-items: center; gap: 1.2rem;">
-                        <a href="{% url 'accounts:login' %}" class="btn-secondary">Login</a>
-                        <a href="{% url 'accounts:signup' %}" class="btn-primary">Sign Up</a>
-                    </div>
+                    <a href="{% url 'accounts:login' %}" class="btn-secondary">Login</a>
+                    <a href="{% url 'accounts:signup' %}" class="btn-primary">Sign Up</a>
                 {% endif %}
-                
-                <!-- Mobile Hamburger Button -->
-                <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Mobile Menu">
-                    <svg width="28" height="28" fill="none" class="hamburger-icon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                </button>
             </div>
         </div>
     </nav>
-
-    <!-- Mobile Navigation Sidebar -->
-    <div class="mobile-overlay" id="mobileOverlay"></div>
-    <div class="mobile-sidebar" id="mobileSidebar">
-        <div class="mobile-sidebar-header">
-            <span class="logo">Mind<span>MappR</span></span>
-            <button id="mobileCloseBtn" class="theme-toggle" aria-label="Close Menu">
-                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-        </div>
-        <div class="mobile-nav-links">
-            {% if user.is_authenticated %}
-                <a href="{% url 'dashboard' %}" class="mobile-nav-link">Dashboard</a>
-                <a href="{% url 'prediction:assessment' %}" class="mobile-nav-link">Check</a>
-                <a href="{% url 'prediction:history' %}" class="mobile-nav-link">History</a>
-                <a href="{% url 'resources:list' %}" class="mobile-nav-link">Resources</a>
-            {% else %}
-                <a href="{% url 'resources:list' %}" class="mobile-nav-link">Resources</a>
-            {% endif %}
-        </div>
-        <div class="mobile-nav-actions">
-            {% if user.is_authenticated %}
-                <span class="mobile-greeting">Hello, {{ user.username }}</span>
-                <form action="{% url 'accounts:logout' %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit" class="btn-secondary full-width">Logout</button>
-                </form>
-            {% else %}
-                <a href="{% url 'accounts:login' %}" class="btn-secondary full-width" style="margin-bottom: 1rem;">Login</a>
-                <a href="{% url 'accounts:signup' %}" class="btn-primary full-width">Sign Up</a>
-            {% endif %}
-        </div>
-    </div>
 
     <main class="content-wrapper animate-fade-in">
         {% block content %}

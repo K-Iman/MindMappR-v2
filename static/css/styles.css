@@ -275,45 +275,7 @@ a:hover {
 }
 
 /* Utility Helpers */
-/* Utility Helpers */
 .full-width { width: 100%; }
 .text-center { text-align: center; }
 .mb-2 { margin-bottom: 2rem; }
 .mt-2 { margin-top: 2rem; }
-
-/* --- Responsive Scaling (Mobile/Tablet) --- */
-@media (max-width: 768px) {
-    .content-wrapper {
-        padding: 1.5rem 1.2rem;
-    }
-    
-    .nav-container {
-        padding: 0 1.2rem;
-    }
-    
-    .landing-page {
-        gap: 4rem !important;
-        padding: 1rem 0 !important;
-    }
-    
-    section.text-center h1 {
-        font-size: 2.4rem !important;
-    }
-    
-    section.text-center p {
-        font-size: 1.1rem !important;
-    }
-    
-    .saas-card {
-        padding: 1.5rem;
-    }
-    
-    .cards-container {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-    
-    .auth-wrapper {
-        min-height: calc(100vh - 120px);
-    }
-}

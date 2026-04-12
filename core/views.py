@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
 def home(request):
-    return HttpResponse("MindMappR is running")
+    return render(request, 'home.html')
 
 @login_required
 def dashboard(request):

@@ -32,6 +32,8 @@ RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
+CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -81,6 +83,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 if os.environ.get('ENVIRONMENT') == 'production':
     DATABASES = {
         'default': dj_database_url.config(
+            default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
             conn_max_age=600,
             conn_health_checks=True,
         )

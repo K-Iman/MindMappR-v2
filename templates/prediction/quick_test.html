@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}MindMappR - Quick Test{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem; margin-top: 1rem;">
+    <h1 style="font-size: 2.2rem; letter-spacing: -0.5px;">Quick Test</h1>
+    <p style="font-size: 1.05rem; max-width: 650px;">A rapid evaluation incorporating both core PHQ variables and immediate situational contexts.</p>
+</div>
+
+{% if result %}
+    <div class="saas-card" style="width: 100%; max-width: 650px; text-align: center; border-color: var(--accent-primary);">
+        <h2 style="color: var(--text-primary); margin-bottom: 0.5rem;">Assessment Result</h2>
+        <div style="font-size: 1.2rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 1rem;">Core Score: {{ result.score }}/6</div>
+        
+        <div style="font-size: 2rem; font-weight: 800; margin-bottom: 1.5rem; color: {% if result.risk == 'High risk' %}var(--danger){% else %}var(--accent-primary){% endif %};">{{ result.risk }}</div>
+        
+        <div style="background-color: var(--danger-subtle); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; border: 1px solid rgba(239, 68, 68, 0.2);">
+            <p style="color: var(--danger); margin: 0; font-size: 0.95rem; line-height: 1.5;">
+                <strong>Disclaimer:</strong> This is not a medical diagnosis. It is only for self-reflection and awareness.
+            </p>
+            
+            {% if result.flags %}
+                <ul style="color: var(--danger); font-size: 0.95rem; margin-top: 1rem; text-align:left; padding-left:1.5rem;">
+                    {% for flag in result.flags %}
+                        <li>{{ flag }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% if result.risk == 'High risk' %}
+                <p style="color: var(--danger); font-weight: 600; font-size: 0.95rem; margin-top: 1rem; margin-bottom: 0;">
+                    Your rapid screening indicates a high likelihood of difficulty. Please seek out a mental health professional for a formal assessment immediately.
+                </p>
+            {% endif %}
+        </div>
+        
+        <a href="{% url 'dashboard' %}" class="btn-primary">Return to Dashboard</a>
+    </div>
+{% else %}
+    <form method="post" action="{% url 'prediction:quick_test' %}">
+        {% csrf_token %}
+        <div style="display: flex; flex-direction: column; gap: 1.5rem; max-width: 800px;">
+            
+            {% if form.non_field_errors %}
+                <div style="color: var(--danger); background: var(--danger-subtle); padding: 1rem; border-radius: 6px;">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            {% for field in form %}
+                <div class="saas-card" style="padding: 1.8rem; border-left: 4px solid var(--accent-primary);">
+                    <p style="font-weight: 600; font-size: 1.15rem; color: var(--text-primary); margin-bottom: 1.2rem;">{{ field.label }}</p>
+                    
+                    {% if field.name == 'q1' or field.name == 'q2' %}
+                        <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                            {% for radio in field %}
+                                <label style="display: flex; align-items: center; gap: 0.8rem; cursor: pointer; padding: 0.8rem; border: 1px solid var(--surface-border); border-radius: 8px; transition: all 0.2s ease;">
+                                    {{ radio.tag }}
+                                    <span style="font-size: 1rem; color: var(--text-secondary);">{{ radio.choice_label }}</span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div style="display:flex; flex-direction:column; width:100%; max-width:400px; font-size: 1rem;">
+                            {{ field }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn-primary mt-2" style="font-size: 1.1rem; padding: 1rem;">Complete Assessment</button>
+        </div>
+    </form>
+
+    <script>
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const groupName = this.name;
+                document.querySelectorAll(`input[name="${groupName}"]`).forEach(r => {
+                    r.closest('label').style.borderColor = r.checked ? 'var(--accent-primary)' : 'var(--surface-border)';
+                    r.closest('label').style.backgroundColor = r.checked ? 'var(--surface-color)' : 'transparent';
+                });
+            });
+        });
+    </script>
+{% endif %}
+{% endblock %}

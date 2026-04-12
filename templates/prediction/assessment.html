@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}MindMappR - Assessment{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h1 style="font-size: 2.2rem; letter-spacing: -0.5px;">Depression Check</h1>
+    <p style="font-size: 1.05rem;">Complete the form below to receive immediate, AI-driven mental health insights.</p>
+</div>
+
+<div class="auth-wrapper" style="align-items: flex-start;">
+    {% if result %}
+        <div class="saas-card" style="width: 100%; max-width: 650px; text-align: center; border-color: var(--accent-primary);">
+            <h2 style="color: var(--accent-primary); margin-bottom: 1.5rem;">Assessment Result</h2>
+            <div style="font-size: 2rem; font-weight: 800; margin-bottom: 1.5rem;">{{ result }}</div>
+            <p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 2rem;">
+                {% if result == "High Risk" %}
+                    Your inputs indicate a higher likelihood of depressive tendencies. We strongly encourage you to seek out professional medical advice or to utilize our provided emergency contact list inside the Resources tab immediately. You are not alone.
+                {% else %}
+                    You appear to be in a relatively stable state right now. Continue maintaining healthy habits, tracking your sleep and stress thresholds actively, and check out our Resources explicitly meant for continuous mental wellness.
+                {% endif %}
+            </p>
+            <a href="{% url 'dashboard' %}" class="btn-primary">Return to Dashboard</a>
+        </div>
+    {% else %}
+        <div class="saas-card" style="width: 100%; max-width: 550px;">
+            <form method="post" action="{% url 'prediction:assessment' %}">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                    <div class="form-group" style="margin-bottom: 1.8rem;">
+                        <label for="{{ field.id_for_label }}" style="font-size: 1.05rem; margin-bottom: 0.8rem;">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <p class="form-help" style="margin-top: 0.5rem;">{{ field.help_text }}</p>
+                        {% endif %}
+                        {% if field.errors %}
+                            <div class="form-error">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                
+                <button type="submit" class="btn-primary full-width mt-2" style="font-size: 1.1rem; padding: 0.85rem;">Submit Assessment</button>
+            </form>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    // Style inputs cleanly dynamically
+    document.querySelectorAll('input').forEach(input => {
+        if (input.type !== 'hidden' && input.type !== 'submit') {
+            input.classList.add('form-input');
+        }
+    });
+</script>
+{% endblock %}

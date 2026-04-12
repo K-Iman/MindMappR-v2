@@ -1,0 +1,370 @@
+{% extends 'base.html' %}
+{% block title %}MindMappR - Resources{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 3rem; margin-top: 1rem; max-width: 800px;">
+    <h1 style="font-size: 2.2rem; letter-spacing: -0.5px;">Mental Wellness Support</h1>
+    <p style="font-size: 1.1rem; line-height: 1.6;">Access critical coping strategies, foundational advice, and
+        emergency contacts to aid navigating complex times securely.</p>
+</div>
+
+<!-- Emergency Contacts -->
+<div class="saas-card" style="margin-bottom: 3rem;">
+    <h2 style="color: var(--danger); font-size: 1.5rem;">Emergency Contacts (US)</h2>
+    <p style="margin-bottom: 1.5rem;">If you are in danger or experiencing an acute crisis, reach out immediately.</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+        <div
+            style="background: var(--surface-color); border: 1px solid var(--surface-border); padding: 1.2rem; border-radius: 8px; font-weight: 600;">
+            <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.3rem;">National Emergency
+            </div>
+            <div style="font-size: 1.3rem;">911</div>
+        </div>
+        <div
+            style="background: var(--surface-color); border: 1px solid var(--surface-border); padding: 1.2rem; border-radius: 8px; font-weight: 600;">
+            <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.3rem;">Suicide & Crisis
+                Lifeline</div>
+            <div style="font-size: 1.3rem;">+234 903 232 1483</div>
+        </div>
+        <div
+            style="background: var(--surface-color); border: 1px solid var(--surface-border); padding: 1.2rem; border-radius: 8px; font-weight: 600;">
+            <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.3rem;">Crisis Text Line</div>
+            <div style="font-size: 1.3rem;">0811 168 0686</div>
+        </div>
+    </div>
+</div>
+
+<!-- Coping Strategies Grid -->
+<div style="margin-bottom: 2rem;">
+    <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem;">Immediate Coping Strategies</h2>
+    <div class="cards-container">
+        <div class="saas-card" style="padding: 1.8rem;">
+            <h3 style="color: var(--accent-primary);">Deep Breathing (4-7-8)</h3>
+            <p style="font-size: 0.95rem;">Inhale loudly for 4 seconds, retain breath logically for 7 seconds, and
+                heavily exhale completely for 8 seconds. Repeat 4 times heavily reducing cortisol vectors.</p>
+        </div>
+        <div class="saas-card" style="padding: 1.8rem;">
+            <h3 style="color: var(--accent-primary);">Grounding (5-4-3-2-1)</h3>
+            <p style="font-size: 0.95rem;">Focus explicitly finding 5 things you can visually see, 4 you can touch, 3
+                you can hear, 2 you smell, and 1 you specifically taste.</p>
+        </div>
+        <div class="saas-card" style="padding: 1.8rem;">
+            <h3 style="color: var(--accent-primary);">Progressive Relaxation</h3>
+            <p style="font-size: 0.95rem;">Slowly tense and relax individual muscle groups aggressively starting
+                directly from your feet incrementally upward directly relieving somatic stress systematically.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     RECOMMENDED READING  —  Open Library Subjects API
+     Zero cost · No API key · Public domain safe
+     ═══════════════════════════════════════════════ -->
+<div style="margin-bottom: 4rem;">
+    <h2 style="font-size: 1.8rem; margin-bottom: 0.4rem;">Recommended Reading</h2>
+    <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">
+        Sourced live from <a href="https://openlibrary.org" target="_blank" rel="noopener"
+            style="color: var(--accent-primary); text-decoration: none;">Open Library</a> — a free, open digital library
+        by the Internet Archive.
+    </p>
+
+    <!-- Category Tabs -->
+    <div id="book-tabs" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem;">
+    </div>
+
+    <!-- Panel -->
+    <div id="book-panel">
+        <div id="books-loading" style="color: var(--text-secondary); font-size: 0.95rem; padding: 1rem 0;">
+            Loading books&hellip;
+        </div>
+        <div id="books-error" style="display: none; color: var(--danger); font-size: 0.95rem; padding: 1rem 0;"></div>
+        <div id="books-grid" style="
+            display: none;
+            grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+            gap: 1.4rem;
+        "></div>
+    </div>
+</div>
+
+<style>
+    .book-tab {
+        padding: 0.45rem 1rem;
+        border-radius: 999px;
+        border: 1px solid var(--surface-border);
+        background: var(--surface-color);
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.15s;
+        white-space: nowrap;
+    }
+
+    .book-tab:hover {
+        border-color: var(--accent-primary);
+        color: var(--accent-primary);
+    }
+
+    .book-tab.active {
+        background: var(--accent-primary);
+        border-color: var(--accent-primary);
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .book-card {
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+        color: inherit;
+        background: var(--surface-color);
+        border: 1px solid var(--surface-border);
+        border-radius: 10px;
+        overflow: hidden;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .book-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 22px rgba(0, 0, 0, 0.13);
+    }
+</style>
+
+<script>
+    (function () {
+
+        /* ─── Category definitions ───────────────────────────────────────
+           Each category maps to one or more Open Library subject slugs.
+           slugs → https://openlibrary.org/subjects/{slug}.json
+           All subjects are well-established OL tags with many works.
+        ────────────────────────────────────────────────────────────────── */
+        const CATEGORIES = [
+            {
+                label: '🧠 Mental Health',
+                emoji: '🧠',
+                subjects: ['mental_health', 'mental_illness'],
+                limit: 12,
+            },
+            {
+                label: '🌿 Mindfulness & Calm',
+                emoji: '🌿',
+                subjects: ['mindfulness', 'meditation', 'relaxation'],
+                limit: 12,
+            },
+            {
+                label: '📖 Short Reads',
+                emoji: '📖',
+                subjects: ['short_stories', 'novellas'],
+                limit: 12,
+            },
+            {
+                label: '💆 Soothing Fiction',
+                emoji: '💆',
+                subjects: ['psychological_fiction', 'healing', 'hope'],
+                limit: 12,
+            },
+            {
+                label: '🎓 Professional & Clinical',
+                emoji: '🎓',
+                subjects: ['psychotherapy', 'psychiatry', 'cognitive_therapy'],
+                limit: 12,
+            },
+            {
+                label: '🧘 Self-Help',
+                emoji: '🧘',
+                subjects: ['self-help', 'self-actualization', 'personal_growth'],
+                limit: 12,
+            },
+            {
+                label: '📚 Psychology',
+                emoji: '📚',
+                subjects: ['psychology', 'social_psychology', 'behavioral_psychology'],
+                limit: 12,
+            },
+            {
+                label: '⚖️ Stoicism & Philosophy',
+                emoji: '⚖️',
+                subjects: ['stoicism', 'philosophy_of_mind', 'ethics'],
+                limit: 12,
+            },
+            {
+                label: '😢 Grief & Loss',
+                emoji: '😢',
+                subjects: ['grief', 'bereavement', 'loss_psychology'],
+                limit: 12,
+            },
+            {
+                label: '😰 Anxiety & Stress',
+                emoji: '😰',
+                subjects: ['anxiety', 'stress_management', 'panic_disorders'],
+                limit: 12,
+            },
+        ];
+
+        /* ─── DOM refs ──────────────────────────────────────────────── */
+        const tabBar = document.getElementById('book-tabs');
+        const grid = document.getElementById('books-grid');
+        const loading = document.getElementById('books-loading');
+        const errorEl = document.getElementById('books-error');
+
+        let activeIdx = 0;
+        const cache = {};   // subject-slug → works[]
+
+        /* ─── Build tabs ────────────────────────────────────────────── */
+        CATEGORIES.forEach((cat, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'book-tab' + (i === 0 ? ' active' : '');
+            btn.textContent = cat.label;
+            btn.addEventListener('click', () => selectCategory(i, btn));
+            tabBar.appendChild(btn);
+        });
+
+        /* ─── Fetch subject via Open Library Subjects API ───────────── */
+        async function fetchSubject(slug, limit) {
+            if (cache[slug]) return cache[slug];
+            const url = `https://openlibrary.org/subjects/${encodeURIComponent(slug)}.json?limit=${limit}`;
+            const res = await fetch(url);
+            if (!res.ok) return [];
+            const data = await res.json();
+            const works = (data.works || []).filter(w => w.title);
+            cache[slug] = works;
+            return works;
+        }
+
+        /* ─── Merge & deduplicate results from multiple subjects ─────── */
+        async function loadCategory(cat) {
+            const key = cat.subjects.join('|');
+            if (cache[key]) return cache[key];
+
+            const arrays = await Promise.all(
+                cat.subjects.map(s => fetchSubject(s, cat.limit))
+            );
+
+            const seen = new Set();
+            const merged = [];
+            for (const arr of arrays) {
+                for (const w of arr) {
+                    const id = w.key || w.title;
+                    if (!seen.has(id)) { seen.add(id); merged.push(w); }
+                    if (merged.length >= cat.limit) break;
+                }
+                if (merged.length >= cat.limit) break;
+            }
+            cache[key] = merged;
+            return merged;
+        }
+
+        /* ─── Select a category tab ──────────────────────────────────── */
+        async function selectCategory(idx, btn) {
+            if (idx === activeIdx && cache[CATEGORIES[idx].subjects.join('|')]) return;
+            activeIdx = idx;
+
+            // Update tab highlight
+            tabBar.querySelectorAll('.book-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Show loading state
+            grid.style.display = 'none';
+            errorEl.style.display = 'none';
+            loading.style.display = 'block';
+
+            try {
+                const works = await loadCategory(CATEGORIES[idx]);
+                if (!works.length) throw new Error('No books found for this subject.');
+                renderGrid(works);
+                loading.style.display = 'none';
+                grid.style.display = 'grid';
+            } catch (err) {
+                loading.style.display = 'none';
+                errorEl.textContent = '⚠️ ' + err.message;
+                errorEl.style.display = 'block';
+            }
+        }
+
+        /* ─── Render book cards ──────────────────────────────────────── */
+        function renderGrid(works) {
+            grid.innerHTML = '';
+            works.forEach(w => grid.appendChild(makeCard(w)));
+        }
+
+        function coverUrl(w) {
+            // cover_id is an integer on subject works
+            if (w.cover_id) return `https://covers.openlibrary.org/b/id/${w.cover_id}-M.jpg`;
+            if (w.cover_edition_key) return `https://covers.openlibrary.org/b/olid/${w.cover_edition_key}-M.jpg`;
+            return null;
+        }
+
+        function makeCard(w) {
+            const title = w.title || 'Untitled';
+            const author = w.authors && w.authors[0] ? w.authors[0].name : 'Unknown Author';
+            const year = w.first_publish_year || '';
+            const cover = coverUrl(w);
+            const url = `https://openlibrary.org${w.key}`;
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.className = 'book-card';
+
+            /* Cover image area */
+            const imgWrap = document.createElement('div');
+            imgWrap.style.cssText = `
+      height: 195px;
+      background: var(--surface-border);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; flex-shrink: 0;
+    `;
+            if (cover) {
+                const img = document.createElement('img');
+                img.src = cover;
+                img.alt = title;
+                img.loading = 'lazy';
+                img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
+                img.onerror = () => { imgWrap.innerHTML = placeholderSVG(); };
+                imgWrap.appendChild(img);
+            } else {
+                imgWrap.innerHTML = placeholderSVG();
+            }
+
+            /* Text info */
+            const info = document.createElement('div');
+            info.style.cssText = 'padding: 0.75rem; flex: 1; display: flex; flex-direction: column; gap: 0.2rem;';
+
+            const titleEl = document.createElement('div');
+            titleEl.textContent = title;
+            titleEl.style.cssText = `
+      font-size: 0.82rem; font-weight: 600; line-height: 1.3;
+      display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden;
+    `;
+
+            const authorEl = document.createElement('div');
+            authorEl.textContent = author;
+            authorEl.style.cssText = 'font-size: 0.76rem; color: var(--text-secondary);';
+
+            const yearEl = document.createElement('div');
+            yearEl.textContent = year ? `First published ${year}` : '';
+            yearEl.style.cssText = 'font-size: 0.72rem; color: var(--text-secondary); margin-top: auto;';
+
+            info.appendChild(titleEl);
+            info.appendChild(authorEl);
+            if (year) info.appendChild(yearEl);
+
+            a.appendChild(imgWrap);
+            a.appendChild(info);
+            return a;
+        }
+
+        function placeholderSVG() {
+            return `<svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" stroke-width="1.4" style="opacity:0.25;">
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+    </svg>`;
+        }
+
+        /* ─── Boot: load first category ─────────────────────────────── */
+        selectCategory(0, tabBar.querySelector('.book-tab'));
+
+    })();
+</script>
+{% endblock %}

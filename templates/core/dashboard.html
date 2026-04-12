@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}MindMappR - Dashboard{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 3rem; margin-top: 2rem;">
+    <h1 style="font-size: 2.5rem; letter-spacing: -0.5px;">Dashboard</h1>
+    <p style="font-size: 1.1rem;">Welcome back, <strong>{{ user.username }}</strong>. Here is your overview.</p>
+</div>
+
+<div class="cards-container">
+    <a href="{% url 'prediction:assessment' %}" class="saas-card module-card">
+        <h3 style="color: var(--text-primary);">Depression Check</h3>
+        <p>Take our AI-driven assessment to analyze your current mental well-being accurately.</p>
+        <div style="margin-top: 1.5rem; font-weight: 600; color: var(--accent-primary); display: flex; align-items: center; gap: 0.5rem; justify-content: flex-end;">
+            Start Assessment &rarr;
+        </div>
+    </a>
+
+    <a href="{% url 'prediction:history' %}" class="saas-card module-card">
+        <h3 style="color: var(--text-primary);">Your History</h3>
+        <p>Review past assessments to track your mental health progress over time seamlessly.</p>
+        <div style="margin-top: 1.5rem; font-weight: 600; color: var(--accent-primary); display: flex; align-items: center; gap: 0.5rem; justify-content: flex-end;">
+            View Log &rarr;
+        </div>
+    </a>
+
+    <a href="{% url 'prediction:progress' %}" class="saas-card module-card">
+        <h3 style="color: var(--text-primary);">Progress Graph</h3>
+        <p>Visualise your cognitive assessment trends graphically mapped via Chart.js seamlessly.</p>
+        <div style="margin-top: 1.5rem; font-weight: 600; color: var(--accent-primary); display: flex; align-items: center; gap: 0.5rem; justify-content: flex-end;">
+            View Chart &rarr;
+        </div>
+    </a>
+
+    <a href="{% url 'resources:list' %}" class="saas-card module-card">
+        <h3 style="color: var(--text-primary);">Mental Health Resources</h3>
+        <p>Explore our curated library of coping strategies and targeted support materials.</p>
+        <div style="margin-top: 1.5rem; font-weight: 600; color: var(--accent-primary); display: flex; align-items: center; gap: 0.5rem; justify-content: flex-end;">
+            Browse Library &rarr;
+        </div>
+    </a>
+</div>
+{% endblock %}

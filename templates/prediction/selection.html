@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}MindMappR - Assessment Selection{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 3rem; margin-top: 2rem;">
+    <h1 style="font-size: 2.5rem; letter-spacing: -0.5px;">Depression Assessment</h1>
+    <p style="font-size: 1.1rem; max-width: 600px;">Please select the type of assessment you wish to complete. Note: This tool is not a medical diagnosis. It is only for self-reflection and awareness.</p>
+</div>
+
+<div class="cards-container">
+    <div class="saas-card module-card">
+        <h3 style="color: var(--text-primary); font-size: 1.5rem;">Quick Test</h3>
+        <p style="font-size: 1.05rem; margin-bottom: 2rem; color: var(--text-secondary);">A fast, 2-question initial screening. Evaluates core constraints over the past 2 weeks securely.</p>
+        <a href="{% url 'prediction:quick_test' %}" class="btn-primary" style="align-self: flex-start;">Start Quick Test</a>
+    </div>
+
+    <div class="saas-card module-card">
+        <h3 style="color: var(--text-primary); font-size: 1.5rem;">Deep Test</h3>
+        <p style="font-size: 1.05rem; margin-bottom: 2rem; color: var(--text-secondary);">Thorough symptom screening using a full 9-point evaluation metric providing a detailed, comprehensive severity output.</p>
+        <a href="{% url 'prediction:deep_test' %}" class="btn-secondary" style="align-self: flex-start;">Start Deep Test</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block title %}MindMappR{% endblock %}
+
+{% block content %}
+<div class="landing-page" style="display: flex; flex-direction: column; gap: 6rem; padding: 2rem 0;">
+
+    <!-- HERO SECTION -->
+    <section class="text-center" style="max-width: 800px; margin: 0 auto; padding-top: 4rem;">
+        <h1 style="font-size: 4rem; letter-spacing: -1.5px; margin-bottom: 2rem; line-height: 1.1;">
+            Understand your mind,<br>
+            <span style="color: var(--accent-primary);">track your wellness.</span>
+        </h1>
+        <p style="font-size: 1.25rem; color: var(--text-secondary); margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+            MindMappR is a simple tool designed to help you self-reflect on your mental well-being through guided questions and personalised feedback.
+        </p>
+        
+        <div style="display: flex; justify-content: center; gap: 1.5rem;">
+            <a href="{% url 'accounts:signup' %}" class="btn-primary" style="font-size: 1.1rem; padding: 0.8rem 2.5rem;">Get Started</a>
+            <a href="{% url 'accounts:login' %}" class="btn-secondary" style="font-size: 1.1rem; padding: 0.8rem 2.5rem;">Login</a>
+        </div>
+    </section>
+
+    <!-- WHAT IT DOES SECTION -->
+    <section style="max-width: 1000px; margin: 0 auto; width: 100%;">
+        <div class="text-center mb-2">
+            <h2>Core Features</h2>
+            <p>Everything you need for guided self-reflection.</p>
+        </div>
+        <div class="cards-container">
+            <div class="saas-card module-card text-center">
+                <h3 style="color: var(--text-primary);">Quick Check</h3>
+                <p>A fast, intuitive mental health check using scientifically backed questions.</p>
+            </div>
+            <div class="saas-card module-card text-center">
+                <h3 style="color: var(--text-primary);">Instant Feedback</h3>
+                <p>Receive immediate, actionable feedback securely based on your input.</p>
+            </div>
+            <div class="saas-card module-card text-center">
+                <h3 style="color: var(--text-primary);">History Tracking</h3>
+                <p>Review past assessments to accurately identify emotional trends over time.</p>
+            </div>
+            <div class="saas-card module-card text-center">
+                <h3 style="color: var(--text-primary);">Support Resources</h3>
+                <p>Easily access a curated repository of emergency contacts and wellness tips.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS SECTION -->
+    <section class="saas-card" style="max-width: 800px; margin: 0 auto; width: 100%; padding: 3rem;">
+        <h2 class="text-center" style="margin-bottom: 3rem;">How It Works</h2>
+        <div style="display: flex; flex-direction: column; gap: 2.5rem;">
+            <div style="display: flex; align-items: flex-start; gap: 1.5rem;">
+                <div style="width: 40px; height: 40px; border-radius: 8px; background: var(--surface-border); display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; color: var(--text-primary);">1</div>
+                <div>
+                    <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">Answer simple questions</h3>
+                    <p style="margin: 0; font-size: 1.05rem;">Log your current stress levels, hours of sleep, and overall mood metrics.</p>
+                </div>
+            </div>
+            <div style="display: flex; align-items: flex-start; gap: 1.5rem;">
+                <div style="width: 40px; height: 40px; border-radius: 8px; background: var(--surface-border); display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; color: var(--text-primary);">2</div>
+                <div>
+                    <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">Get instant feedback</h3>
+                    <p style="margin: 0; font-size: 1.05rem;">Our prediction model evaluates your inputs securely in seconds.</p>
+                </div>
+            </div>
+            <div style="display: flex; align-items: flex-start; gap: 1.5rem;">
+                <div style="width: 40px; height: 40px; border-radius: 8px; background: var(--surface-border); display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; color: var(--text-primary);">3</div>
+                <div>
+                    <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">Track over time</h3>
+                    <p style="margin: 0; font-size: 1.05rem;">Watch your historical data populate and identify personal emotional trends.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY IT EXISTS -->
+    <section class="text-center" style="max-width: 600px; margin: 0 auto;">
+        <h2>Built for You</h2>
+        <p style="font-size: 1.1rem;">MindMappR was built to help professionals, students, and everyday individuals reflect on their mental well-being in a clean, private, and distraction-free environment.</p>
+    </section>
+
+    <!-- DISCLAIMER -->
+    <section class="text-center" style="max-width: 700px; margin: 0 auto;">
+        <div style="background-color: var(--danger-subtle); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.2);">
+            <p style="color: var(--danger); margin: 0; font-size: 0.95rem;">
+                <strong>Disclaimer:</strong> This tool is not a medical diagnosis matrix. It is strictly for awareness and personal self-reflection.
+            </p>
+        </div>
+    </section>
+
+</div>
+
+<footer class="text-center mt-2" style="padding: 2rem 0; border-top: 1px solid var(--surface-border);">
+    <p>MindMappR &copy; {% now "Y" %}</p>
+</footer>
+{% endblock %}

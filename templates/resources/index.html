@@ -1,0 +1,594 @@
+{% extends 'base.html' %}
+{% block title %}MindMappR - Resources{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 3rem; margin-top: 1rem; max-width: 800px;">
+    <h1 style="font-size: 2.2rem; letter-spacing: -0.5px;">Mental Wellness Support</h1>
+    <p style="font-size: 1.1rem; line-height: 1.6;">Access critical coping strategies, foundational advice, and
+        emergency contacts to aid navigating complex times securely.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     EMERGENCY CONTACTS — Country selector + call buttons
+     ═══════════════════════════════════════════════ -->
+<div class="saas-card" style="margin-bottom: 3rem;">
+    <div
+        style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.2rem;">
+        <h2 style="color: var(--danger); font-size: 1.5rem; margin:0;"> Emergency Contacts</h2>
+
+        <!-- Country Selector -->
+        <div style="position:relative;">
+            <select id="country-select" style="
+                appearance: none;
+                -webkit-appearance: none;
+                background: var(--surface-color);
+                border: 1px solid var(--surface-border);
+                color: inherit;
+                padding: 0.5rem 2.4rem 0.5rem 0.9rem;
+                border-radius: 8px;
+                font-size: 0.9rem;
+                cursor: pointer;
+                min-width: 200px;
+            ">
+            </select>
+            <span
+                style="pointer-events:none; position:absolute; right:0.7rem; top:50%; transform:translateY(-50%); font-size:0.75rem; opacity:0.5;">▼</span>
+        </div>
+    </div>
+
+    <p id="contacts-intro" style="margin-bottom: 1.5rem; font-size:0.95rem;">If you are in danger or experiencing an
+        acute crisis, reach out immediately. Tap any number to call.</p>
+
+    <div id="contacts-grid"
+        style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem;"></div>
+
+    <p style="margin-top:1.2rem; font-size:0.78rem; color:var(--text-secondary);">
+        ⚠️ Numbers are verified from public sources including
+        <a href="https://findahelpline.com" target="_blank" rel="noopener" style="color:var(--accent-primary);">Find A
+            Helpline</a>,
+        <a href="https://www.helpguide.org/find-help" target="_blank" rel="noopener"
+            style="color:var(--accent-primary);">HelpGuide</a>, and
+        <a href="https://en.wikipedia.org/wiki/List_of_suicide_crisis_lines" target="_blank" rel="noopener"
+            style="color:var(--accent-primary);">Wikipedia crisis lines</a>.
+        Verify locally before relying on them in an emergency.
+    </p>
+</div>
+
+<!-- Coping Strategies Grid -->
+<div style="margin-bottom: 2rem;">
+    <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem;">Immediate Coping Strategies</h2>
+    <div class="cards-container">
+        <div class="saas-card" style="padding: 1.8rem;">
+            <h3 style="color: var(--accent-primary);">Deep Breathing (4-7-8)</h3>
+            <p style="font-size: 0.95rem;">Inhale loudly for 4 seconds, retain breath logically for 7 seconds, and
+                heavily exhale completely for 8 seconds. Repeat 4 times heavily reducing cortisol vectors.</p>
+        </div>
+        <div class="saas-card" style="padding: 1.8rem;">
+            <h3 style="color: var(--accent-primary);">Grounding (5-4-3-2-1)</h3>
+            <p style="font-size: 0.95rem;">Focus explicitly finding 5 things you can visually see, 4 you can touch, 3
+                you can hear, 2 you smell, and 1 you specifically taste.</p>
+        </div>
+        <div class="saas-card" style="padding: 1.8rem;">
+            <h3 style="color: var(--accent-primary);">Progressive Relaxation</h3>
+            <p style="font-size: 0.95rem;">Slowly tense and relax individual muscle groups aggressively starting
+                directly from your feet incrementally upward directly relieving somatic stress systematically.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     RECOMMENDED READING  —  Open Library Subjects API
+     ═══════════════════════════════════════════════ -->
+<div style="margin-bottom: 4rem;">
+    <h2 style="font-size: 1.8rem; margin-bottom: 0.4rem;">Recommended Reading</h2>
+    <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">
+        Sourced live from <a href="https://openlibrary.org" target="_blank" rel="noopener"
+            style="color: var(--accent-primary); text-decoration: none;">Open Library</a> — a free, open digital library
+        by the Internet Archive.
+    </p>
+    <div id="book-tabs" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem;"></div>
+    <div id="book-panel">
+        <div id="books-loading" style="color: var(--text-secondary); font-size: 0.95rem; padding: 1rem 0;">Loading
+            books&hellip;</div>
+        <div id="books-error" style="display: none; color: var(--danger); font-size: 0.95rem; padding: 1rem 0;"></div>
+        <div id="books-grid"
+            style="display: none; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 1.4rem;"></div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     STYLES
+     ═══════════════════════════════════════════════ -->
+<style>
+    .contact-card {
+        background: var(--surface-color);
+        border: 1px solid var(--surface-border);
+        border-radius: 10px;
+        padding: 1.1rem 1.2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        transition: border-color 0.15s;
+    }
+
+    .contact-card:hover {
+        border-color: var(--danger);
+    }
+
+    .contact-card .label {
+        font-size: 0.82rem;
+        color: var(--text-secondary);
+    }
+
+    .contact-card .number {
+        font-size: 1.2rem;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+    }
+
+    .contact-card .call-btn {
+        margin-top: 0.5rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: var(--danger);
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 0.4rem 0.9rem;
+        font-size: 0.82rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        width: fit-content;
+        transition: opacity 0.15s;
+    }
+
+    .contact-card .call-btn:hover {
+        opacity: 0.85;
+    }
+
+    .book-tab {
+        padding: 0.45rem 1rem;
+        border-radius: 999px;
+        border: 1px solid var(--surface-border);
+        background: var(--surface-color);
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.15s;
+        white-space: nowrap;
+    }
+
+    .book-tab:hover {
+        border-color: var(--accent-primary);
+        color: var(--accent-primary);
+    }
+
+    .book-tab.active {
+        background: var(--accent-primary);
+        border-color: var(--accent-primary);
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .book-card {
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+        color: inherit;
+        background: var(--surface-color);
+        border: 1px solid var(--surface-border);
+        border-radius: 10px;
+        overflow: hidden;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .book-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 22px rgba(0, 0, 0, 0.13);
+    }
+</style>
+
+<!-- ═══════════════════════════════════════════════
+     SCRIPTS
+     ═══════════════════════════════════════════════ -->
+<script>
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       SECTION 1: EMERGENCY CONTACTS
+       Sources: HelpGuide, Find A Helpline, Wikipedia,
+                Mental Health Africa, Disability Wiki
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    (function () {
+
+        const COUNTRIES = [
+            {
+                name: '🇳🇬 Nigeria',
+                contacts: [
+                    { label: 'National Emergency', number: '112' },
+                    { label: 'MANI Crisis Helpline', number: '+234 809 111 6264' },
+                    { label: 'MANI Alternate', number: '+234 811 680 686' },
+                    { label: 'She Writes Woman (24/7, toll-free)', number: '0800 800 2000' },
+                    { label: 'SURPIN Suicide Prevention', number: '+234 903 232 1483' },
+                    { label: 'Crisis Text Line (Lagos)', number: '0811 168 0686' },
+                ],
+            },
+            {
+                name: '🇺🇸 United States',
+                contacts: [
+                    { label: 'National Emergency', number: '911' },
+                    { label: '988 Suicide & Crisis Lifeline', number: '988' },
+                    { label: 'Crisis Text Line (text HOME)', number: '741741' },
+                    { label: 'NAMI HelpLine', number: '1-800-950-6264' },
+                    { label: 'SAMHSA National Helpline', number: '1-800-662-4357' },
+                    { label: 'Trevor Project (LGBTQ+ Youth)', number: '1-866-488-7386' },
+                    { label: 'Veterans Crisis Line', number: '988 (press 1)' },
+                    { label: 'Trans Lifeline', number: '1-877-565-8860' },
+                ],
+            },
+            {
+                name: '🇬🇧 United Kingdom',
+                contacts: [
+                    { label: 'National Emergency', number: '999' },
+                    { label: 'Samaritans (24/7, free)', number: '116 123' },
+                    { label: 'Crisis Text Line (text SHOUT)', number: '85258' },
+                    { label: 'Mind Infoline', number: '0300 123 3393' },
+                    { label: 'Papyrus (youth suicide prevention)', number: '0800 068 4141' },
+                    { label: 'Childline (under 19s)', number: '0800 1111' },
+                ],
+            },
+            {
+                name: '🇨🇦 Canada',
+                contacts: [
+                    { label: 'National Emergency', number: '911' },
+                    { label: '988 Suicide Crisis Helpline', number: '988' },
+                    { label: 'Kids Help Phone (under 30)', number: '1-800-668-6868' },
+                    { label: 'Crisis Text Line (text HOME)', number: '741741' },
+                    { label: 'Hope for Wellness (Indigenous)', number: '1-855-242-3310' },
+                    { label: 'Trans Lifeline', number: '1-877-330-6366' },
+                ],
+            },
+            {
+                name: '🇦🇺 Australia',
+                contacts: [
+                    { label: 'National Emergency', number: '000' },
+                    { label: 'Lifeline (24/7)', number: '13 11 14' },
+                    { label: 'Beyond Blue', number: '1300 22 4636' },
+                    { label: 'Kids Helpline (5–25 yrs)', number: '1800 551 800' },
+                    { label: 'MensLine Australia', number: '1300 78 99 78' },
+                    { label: 'Suicide Call Back Service', number: '1300 659 467' },
+                ],
+            },
+            {
+                name: '🇮🇳 India',
+                contacts: [
+                    { label: 'National Emergency', number: '112' },
+                    { label: 'Vandrevala Foundation (24/7)', number: '1860-2662-345' },
+                    { label: 'iCall', number: '9152987821' },
+                    { label: 'Snehi (6am–10pm)', number: '044-24640050' },
+                    { label: 'Aasra (24/7)', number: '022-27546669' },
+                ],
+            },
+            {
+                name: '🇿🇦 South Africa',
+                contacts: [
+                    { label: 'National Emergency', number: '10111' },
+                    { label: 'SADAG Helpline (24/7)', number: '0800 567 567' },
+                    { label: 'Lifeline Southern Africa', number: '0861 322 322' },
+                    { label: 'Suicide Crisis Line', number: '0800 567 567' },
+                    { label: 'Childline South Africa', number: '0800 055 555' },
+                ],
+            },
+            {
+                name: '🇰🇪 Kenya',
+                contacts: [
+                    { label: 'National Emergency', number: '999' },
+                    { label: 'Befrienders Kenya (24/7)', number: '+254 722 178 177' },
+                    { label: 'Kenya Red Cross (toll-free)', number: '1199' },
+                    { label: 'Niskize Helpline', number: '+254 900 620 800' },
+                ],
+            },
+            {
+                name: '🇬🇭 Ghana',
+                contacts: [
+                    { label: 'National Emergency', number: '999' },
+                    { label: 'Lifeline Ghana', number: '+233 244 471 279' },
+                    { label: 'Mental Health Authority', number: '+233 302 685 758' },
+                ],
+            },
+            {
+                name: '🇺🇬 Uganda',
+                contacts: [
+                    { label: 'National Emergency', number: '999' },
+                    { label: 'Mental Health Uganda', number: '+256 414 664 264' },
+                    { label: 'Toll-Free Helpline', number: '0800 200 600' },
+                ],
+            },
+            {
+                name: '🇩🇪 Germany',
+                contacts: [
+                    { label: 'National Emergency', number: '112' },
+                    { label: 'Telefonseelsorge (24/7, free)', number: '0800 111 0 111' },
+                    { label: 'Telefonseelsorge Alternate', number: '0800 111 0 222' },
+                    { label: 'International Helpline Berlin', number: '030-44 01 06 07' },
+                    { label: 'Nummer gegen Kummer (kids)', number: '0800 111 0 550' },
+                ],
+            },
+            {
+                name: '🇫🇷 France',
+                contacts: [
+                    { label: 'National Emergency', number: '15' },
+                    { label: 'National Suicide Prevention (24/7)', number: '3114' },
+                    { label: 'Fil santé jeunes (youth, free)', number: '0800 235 236' },
+                    { label: 'SOS Amitié (24/7)', number: '09 72 39 40 50' },
+                    { label: 'Croix Rouge Ecoute (free)', number: '0 800 858 858' },
+                ],
+            },
+            {
+                name: '🇧🇷 Brazil',
+                contacts: [
+                    { label: 'National Emergency', number: '190' },
+                    { label: 'CVV Suicide Prevention (24/7)', number: '188' },
+                    { label: 'CAPS (Community Mental Health)', number: '156' },
+                ],
+            },
+            {
+                name: '🇵🇭 Philippines',
+                contacts: [
+                    { label: 'National Emergency', number: '911' },
+                    { label: 'NCMH Crisis Hotline (landline)', number: '1553' },
+                    { label: 'NCMH (mobile)', number: '0917 899 8727' },
+                    { label: 'In Touch Crisis Line (24/7)', number: '+63 2 8893 7603' },
+                    { label: 'HOPELINE PH (Globe/TM)', number: '2919' },
+                ],
+            },
+            {
+                name: '🇨🇳 China',
+                contacts: [
+                    { label: 'National Emergency', number: '120' },
+                    { label: 'National Mental Health Hotline', number: '12356' },
+                    { label: 'Beijing Crisis Center (landline)', number: '800-810-1117' },
+                    { label: 'Beijing Crisis Center (mobile)', number: '010-8295-1332' },
+                    { label: 'Lifeline China (10am–10pm)', number: '400 821 1215' },
+                ],
+            },
+            {
+                name: '🇯🇵 Japan',
+                contacts: [
+                    { label: 'National Emergency', number: '110' },
+                    { label: 'Inochi no Denwa (24/7)', number: '0120-783-556' },
+                    { label: 'Kokoro no Health Consultation', number: '0570-064-556' },
+                    { label: 'Youth Phone (24/7)', number: '0120-279-338' },
+                ],
+            },
+            {
+                name: '🇿🇦 Ireland',
+                contacts: [
+                    { label: 'National Emergency', number: '999' },
+                    { label: 'Samaritans (24/7, free)', number: '116 123' },
+                    { label: 'Pieta House (24/7)', number: '116 123' },
+                    { label: 'Text About It (text HELLO)', number: '50808' },
+                    { label: 'Childline (under 18)', number: '1800 66 66 00' },
+                ],
+            },
+            {
+                name: '🇳🇿 New Zealand',
+                contacts: [
+                    { label: 'National Emergency', number: '111' },
+                    { label: 'Lifeline (24/7)', number: '0800 543 354' },
+                    { label: 'Suicide Crisis Helpline', number: '0508 828 865' },
+                    { label: 'Need to Talk? (text or call)', number: '1737' },
+                    { label: 'Youthline', number: '0800 376 633' },
+                ],
+            },
+            {
+                name: '🇿🇦 Denmark',
+                contacts: [
+                    { label: 'National Emergency', number: '112' },
+                    { label: 'Livslinien (11am–4am)', number: '70 201 201' },
+                    { label: 'BørneTelefonen (child helpline)', number: '116 111' },
+                ],
+            },
+            {
+                name: '🇫🇮 Finland',
+                contacts: [
+                    { label: 'National Emergency', number: '112' },
+                    { label: 'MIELI Mental Health Finland (Finnish, 24/7)', number: '09 2525 0111' },
+                    { label: 'MIELI (Swedish)', number: '09 2525 0112' },
+                    { label: 'MIELI (Arabic & English)', number: '09 2525 0113' },
+                ],
+            },
+        ];
+
+        const select = document.getElementById('country-select');
+        const grid = document.getElementById('contacts-grid');
+
+        // Populate dropdown
+        COUNTRIES.forEach((c, i) => {
+            const opt = document.createElement('option');
+            opt.value = i;
+            opt.textContent = c.name;
+            // Default to Nigeria (index 0)
+            select.appendChild(opt);
+        });
+
+        function renderContacts(idx) {
+            const country = COUNTRIES[idx];
+            grid.innerHTML = '';
+            country.contacts.forEach(c => {
+                const card = document.createElement('div');
+                card.className = 'contact-card';
+
+                const label = document.createElement('div');
+                label.className = 'label';
+                label.textContent = c.label;
+
+                const number = document.createElement('div');
+                number.className = 'number';
+                number.textContent = c.number;
+
+                // Strip non-digit chars for tel: link (keep +)
+                const dialable = c.number.replace(/[^\d+]/g, '');
+                const btn = document.createElement('a');
+                btn.className = 'call-btn';
+                btn.href = `tel:${dialable}`;
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07
+                 A19.5 19.5 0 0 1 4.15 12a19.79 19.79 0 0 1-3.07-8.67
+                 A2 2 0 0 1 3.09 1h3a2 2 0 0 1 2 1.72
+                 c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91
+                 a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45
+                 c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16z"/>
+      </svg> Call Now`;
+
+                card.appendChild(label);
+                card.appendChild(number);
+                card.appendChild(btn);
+                grid.appendChild(card);
+            });
+        }
+
+        select.addEventListener('change', e => renderContacts(Number(e.target.value)));
+        renderContacts(0); // default: Nigeria
+    })();
+
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       SECTION 2: RECOMMENDED READING (unchanged)
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    (function () {
+        const CATEGORIES = [
+            { label: '🧠 Mental Health', subjects: ['mental_health', 'mental_illness'], limit: 12 },
+            { label: '🌿 Mindfulness & Calm', subjects: ['mindfulness', 'meditation', 'relaxation'], limit: 12 },
+            { label: '📖 Short Reads', subjects: ['short_stories', 'novellas'], limit: 12 },
+            { label: '💆 Soothing Fiction', subjects: ['psychological_fiction', 'healing', 'hope'], limit: 12 },
+            { label: '🎓 Professional', subjects: ['psychotherapy', 'psychiatry', 'cognitive_therapy'], limit: 12 },
+            { label: '🧘 Self-Help', subjects: ['self-help', 'self-actualization', 'personal_growth'], limit: 12 },
+            { label: '📚 Psychology', subjects: ['psychology', 'social_psychology', 'behavioral_psychology'], limit: 12 },
+            { label: '⚖️ Stoicism', subjects: ['stoicism', 'philosophy_of_mind', 'ethics'], limit: 12 },
+            { label: '😢 Grief & Loss', subjects: ['grief', 'bereavement', 'loss_psychology'], limit: 12 },
+            { label: '😰 Anxiety & Stress', subjects: ['anxiety', 'stress_management', 'panic_disorders'], limit: 12 },
+        ];
+
+        const tabBar = document.getElementById('book-tabs');
+        const grid = document.getElementById('books-grid');
+        const loading = document.getElementById('books-loading');
+        const errorEl = document.getElementById('books-error');
+        let activeIdx = 0;
+        const cache = {};
+
+        CATEGORIES.forEach((cat, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'book-tab' + (i === 0 ? ' active' : '');
+            btn.textContent = cat.label;
+            btn.addEventListener('click', () => selectCategory(i, btn));
+            tabBar.appendChild(btn);
+        });
+
+        async function fetchSubject(slug, limit) {
+            if (cache[slug]) return cache[slug];
+            const res = await fetch(`https://openlibrary.org/subjects/${encodeURIComponent(slug)}.json?limit=${limit}`);
+            if (!res.ok) return [];
+            const data = await res.json();
+            const works = (data.works || []).filter(w => w.title);
+            cache[slug] = works;
+            return works;
+        }
+
+        async function loadCategory(cat) {
+            const key = cat.subjects.join('|');
+            if (cache[key]) return cache[key];
+            const arrays = await Promise.all(cat.subjects.map(s => fetchSubject(s, cat.limit)));
+            const seen = new Set(), merged = [];
+            for (const arr of arrays) {
+                for (const w of arr) {
+                    const id = w.key || w.title;
+                    if (!seen.has(id)) { seen.add(id); merged.push(w); }
+                    if (merged.length >= cat.limit) break;
+                }
+                if (merged.length >= cat.limit) break;
+            }
+            cache[key] = merged;
+            return merged;
+        }
+
+        async function selectCategory(idx, btn) {
+            if (idx === activeIdx && cache[CATEGORIES[idx].subjects.join('|')]) return;
+            activeIdx = idx;
+            tabBar.querySelectorAll('.book-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            grid.style.display = 'none';
+            errorEl.style.display = 'none';
+            loading.style.display = 'block';
+            try {
+                const works = await loadCategory(CATEGORIES[idx]);
+                if (!works.length) throw new Error('No books found for this subject.');
+                renderGrid(works);
+                loading.style.display = 'none';
+                grid.style.display = 'grid';
+            } catch (err) {
+                loading.style.display = 'none';
+                errorEl.textContent = '⚠️ ' + err.message;
+                errorEl.style.display = 'block';
+            }
+        }
+
+        function renderGrid(works) {
+            grid.innerHTML = '';
+            works.forEach(w => grid.appendChild(makeCard(w)));
+        }
+
+        function coverUrl(w) {
+            if (w.cover_id) return `https://covers.openlibrary.org/b/id/${w.cover_id}-M.jpg`;
+            if (w.cover_edition_key) return `https://covers.openlibrary.org/b/olid/${w.cover_edition_key}-M.jpg`;
+            return null;
+        }
+
+        function makeCard(w) {
+            const title = w.title || 'Untitled';
+            const author = w.authors && w.authors[0] ? w.authors[0].name : 'Unknown Author';
+            const year = w.first_publish_year || '';
+            const cover = coverUrl(w);
+            const a = document.createElement('a');
+            a.href = `https://openlibrary.org${w.key}`;
+            a.target = '_blank'; a.rel = 'noopener noreferrer';
+            a.className = 'book-card';
+            const imgWrap = document.createElement('div');
+            imgWrap.style.cssText = 'height:195px;background:var(--surface-border);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;';
+            if (cover) {
+                const img = document.createElement('img');
+                img.src = cover; img.alt = title; img.loading = 'lazy';
+                img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
+                img.onerror = () => { imgWrap.innerHTML = placeholderSVG(); };
+                imgWrap.appendChild(img);
+            } else { imgWrap.innerHTML = placeholderSVG(); }
+            const info = document.createElement('div');
+            info.style.cssText = 'padding:0.75rem;flex:1;display:flex;flex-direction:column;gap:0.2rem;';
+            const titleEl = document.createElement('div');
+            titleEl.textContent = title;
+            titleEl.style.cssText = 'font-size:0.82rem;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;';
+            const authorEl = document.createElement('div');
+            authorEl.textContent = author;
+            authorEl.style.cssText = 'font-size:0.76rem;color:var(--text-secondary);';
+            const yearEl = document.createElement('div');
+            yearEl.textContent = year ? `First published ${year}` : '';
+            yearEl.style.cssText = 'font-size:0.72rem;color:var(--text-secondary);margin-top:auto;';
+            info.appendChild(titleEl); info.appendChild(authorEl);
+            if (year) info.appendChild(yearEl);
+            a.appendChild(imgWrap); a.appendChild(info);
+            return a;
+        }
+
+        function placeholderSVG() {
+            return `<svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" stroke-width="1.4" style="opacity:0.25;">
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+    </svg>`;
+        }
+
+        selectCategory(0, tabBar.querySelector('.book-tab'));
+    })();
+</script>
+{% endblock %}

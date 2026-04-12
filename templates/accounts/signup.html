@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}MindMappR - Sign Up{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper" style="margin: 3rem 0;">
+    <div class="saas-card" style="width: 100%; max-width: 450px; padding: 2.5rem;">
+        <h2 class="text-center mb-2" style="font-size: 1.8rem; letter-spacing: -0.5px;">Create an Account</h2>
+        <p class="text-center" style="margin-bottom: 2rem;">Join MindMappR to start your journey</p>
+        
+        <form method="post" action="{% url 'accounts:signup' %}">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+                <div style="color: var(--danger); background: var(--danger-subtle); padding: 0.8rem; border-radius: 6px; font-size: 0.9rem; margin-bottom: 1.5rem;">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <p class="form-help">{{ field.help_text|safe }}</p>
+                    {% endif %}
+                    {% if field.errors %}
+                        <div class="form-error">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            
+            <button type="submit" class="btn-primary full-width mt-2" style="padding: 0.85rem; font-size: 1.05rem;">Register</button>
+        </form>
+        
+        <p class="text-center" style="margin-top: 1.5rem; font-size: 0.95rem;">
+            Already have an account? <a href="{% url 'accounts:login' %}" style="font-weight: 600;">Log in here</a>
+        </p>
+    </div>
+</div>
+
+<script>
+    // Ensure form inputs render beautifully with SaaS padding
+    document.querySelectorAll('input').forEach(input => {
+        if (input.type !== 'hidden' && input.type !== 'submit') {
+            input.classList.add('form-input');
+        }
+    });
+</script>
+{% endblock %}

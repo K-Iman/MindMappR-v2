@@ -45,7 +45,7 @@ Each test provides:
 - Database: SQLite (development), PostgreSQL (production)
 - Deployment: Render
 - Visualization: Chart.js (for progress graphs)
-- ML (legacy/optional): Scikit-learn (if enabled)
+- ML: Scikit-learn
 
 ---
 

@@ -17,14 +17,17 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY',
+    'dev-insecure-key-change-me'
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 ENVIRONMENT = os.environ.get('ENVIRONMENT', 'development')
 
-DEBUG = ENVIRONMENT == 'development'
+DEBUG = os.environ.get('ENVIRONMENT', 'development') != 'production'
 
-ALLOWED_HOSTS = ['.onrender.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com']
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
@@ -75,7 +78,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-if 'DATABASE_URL' in os.environ:
+if os.environ.get('ENVIRONMENT') == 'production':
     DATABASES = {
         'default': dj_database_url.config(
             conn_max_age=600,
@@ -89,7 +92,6 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {

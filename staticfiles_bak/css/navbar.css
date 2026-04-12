@@ -1,0 +1,120 @@
+body {
+    padding-top: 80px; /* Prevent content overlap from fixed navbar */
+}
+
+/* Base Navbar Structure */
+.top-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #0b1120; /* Deep navy/black background */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    height: 75px;
+}
+
+/* Branding Logo */
+.top-navbar .logo {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #f8fafc;
+    flex-shrink: 0;
+}
+
+.top-navbar .logo span {
+    color: #3b82f6; /* Accent blue */
+}
+
+/* Central Links Container */
+.nav-links {
+    display: flex;
+    gap: 2.5rem;
+    align-items: center;
+}
+
+/* Link Styling & Animation */
+.top-navbar .nav-link {
+    color: #e2e8f0;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 0.5rem 0;
+    transition: transform 0.25s ease, color 0.25s ease;
+    display: inline-block;
+}
+
+/* Lift Effect & Gradient Text */
+.top-navbar .nav-link:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(to right, #3b82f6, #a855f7); /* Blue to Purple */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Animated Underline */
+.top-navbar .nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background: linear-gradient(to right, #3b82f6, #a855f7);
+    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.top-navbar .nav-link:hover::after {
+    width: 100%;
+}
+
+/* User Section Profile */
+.nav-user {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.nav-username {
+    color: #f8fafc;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+/* Logout Button */
+.nav-logout {
+    background: transparent;
+    border: 1px solid #ef4444;
+    color: #ef4444;
+    padding: 0.5rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.25s ease;
+}
+
+.nav-logout:hover {
+    background: #ef4444;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        display: none; /* Hide on extremely small layouts */
+    }
+}

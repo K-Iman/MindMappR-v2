@@ -51,7 +51,44 @@
                     <a href="{% url 'accounts:signup' %}" class="btn-primary">Sign Up</a>
                 {% endif %}
             </div>
+
+            <!-- Mobile Hamburger Button -->
+            <button class="hamburger" id="hamburgerBtn" aria-label="Open navigation menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
+    </nav>
+
+    <!-- Mobile Sidebar -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <nav class="mobile-sidebar" id="mobileSidebar" aria-label="Mobile navigation">
+        <!-- Theme toggle at top of sidebar -->
+        <button id="themeToggleMobile" class="theme-toggle" aria-label="Toggle Dark Mode" style="align-self: flex-start; margin-bottom: 0.5rem;"></button>
+
+        {% if user.is_authenticated %}
+            <span class="sidebar-username">{{ user.username }}</span>
+            <div class="sidebar-divider"></div>
+            <a href="{% url 'dashboard' %}" class="sidebar-nav-link">Dashboard</a>
+            <a href="{% url 'prediction:assessment' %}" class="sidebar-nav-link">Check</a>
+            <a href="{% url 'prediction:history' %}" class="sidebar-nav-link">History</a>
+            <a href="{% url 'resources:list' %}" class="sidebar-nav-link">Resources</a>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-actions">
+                <form action="{% url 'accounts:logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-secondary full-width">Logout</button>
+                </form>
+            </div>
+        {% else %}
+            <a href="{% url 'resources:list' %}" class="sidebar-nav-link">Resources</a>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-actions">
+                <a href="{% url 'accounts:login' %}" class="btn-secondary full-width" style="text-align:center;">Login</a>
+                <a href="{% url 'accounts:signup' %}" class="btn-primary full-width" style="text-align:center;">Sign Up</a>
+            </div>
+        {% endif %}
     </nav>
 
     <main class="content-wrapper animate-fade-in">

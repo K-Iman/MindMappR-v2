@@ -2,6 +2,12 @@
 {% block title %}MindMappR - Quick Test{% endblock %}
 
 {% block content %}
+<style>
+    @media (max-width: 768px) {
+        .test-form-btn { width: 100% !important; }
+        .test-input-wrap { max-width: 100% !important; }
+    }
+</style>
 <div style="margin-bottom: 2rem; margin-top: 1rem;">
     <h1 style="font-size: 2.2rem; letter-spacing: -0.5px;">Quick Test</h1>
     <p style="font-size: 1.05rem; max-width: 650px;">A rapid evaluation incorporating both core PHQ variables and immediate situational contexts.</p>
@@ -61,13 +67,13 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        <div style="display:flex; flex-direction:column; width:100%; max-width:400px; font-size: 1rem;">
+                        <div class="test-input-wrap" style="display:flex; flex-direction:column; width:100%; max-width:400px; font-size: 1rem;">
                             {{ field }}
                         </div>
                     {% endif %}
                 </div>
             {% endfor %}
-            <button type="submit" class="btn-primary mt-2" style="font-size: 1.1rem; padding: 1rem;">Complete Assessment</button>
+            <button type="submit" class="btn-primary test-form-btn mt-2" style="font-size: 1.1rem; padding: 1rem;">Complete Assessment</button>
         </div>
     </form>
 

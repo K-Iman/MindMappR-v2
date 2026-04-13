@@ -2,6 +2,16 @@
 {% block title %}MindMappR - Resources{% endblock %}
 
 {% block content %}
+<style>
+    @media (max-width: 768px) {
+        .contacts-header { flex-direction: column !important; align-items: flex-start !important; gap: 0.75rem !important; }
+        .contacts-header select { min-width: 100% !important; }
+        #book-tabs { flex-wrap: nowrap !important; overflow-x: auto !important; padding-bottom: 0.5rem !important; scrollbar-width: none !important; }
+        #book-tabs::-webkit-scrollbar { display: none !important; }
+        .book-tab { flex-shrink: 0; }
+        #books-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important; }
+    }
+</style>
 <div style="margin-bottom: 3rem; margin-top: 1rem; max-width: 800px;">
     <h1 style="font-size: 2.2rem; letter-spacing: -0.5px;">Mental Wellness Support</h1>
     <p style="font-size: 1.1rem; line-height: 1.6;">Access critical coping strategies, foundational advice, and
@@ -13,6 +23,7 @@
      ═══════════════════════════════════════════════ -->
 <div class="saas-card" style="margin-bottom: 3rem;">
     <div
+        class="contacts-header"
         style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.2rem;">
         <h2 style="color: var(--danger); font-size: 1.5rem; margin:0;"> Emergency Contacts</h2>
 

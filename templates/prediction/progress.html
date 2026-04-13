@@ -2,7 +2,12 @@
 {% block title %}MindMappR - Progress Graph{% endblock %}
 
 {% block content %}
-<div style="margin-bottom: 2rem; margin-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+<style>
+    @media (max-width: 768px) {
+        .page-header { flex-direction: column !important; align-items: flex-start !important; gap: 0.75rem !important; }
+    }
+</style>
+<div class="page-header" style="margin-bottom: 2rem; margin-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
     <div>
         <h1 style="font-size: 2.2rem; letter-spacing: -0.5px;">Progress Graph</h1>
         <p style="font-size: 1.05rem;">Visualise your cognitive assessment trends over time securely.</p>

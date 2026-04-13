@@ -2,6 +2,11 @@
 {% block title %}MindMappR - Deep Test{% endblock %}
 
 {% block content %}
+<style>
+    @media (max-width: 768px) {
+        .test-form-btn { width: 100% !important; }
+    }
+</style>
 <div style="margin-bottom: 2rem; margin-top: 1rem;">
     <h1 style="font-size: 2.2rem; letter-spacing: -0.5px;">Deep Test</h1>
     <p style="font-size: 1.05rem; max-width: 650px;">Over the last 2 weeks, how often have you been bothered by the following problems?</p>
@@ -44,7 +49,7 @@
                     </div>
                 </div>
             {% endfor %}
-            <button type="submit" class="btn-primary mt-2 mb-2" style="font-size: 1.1rem; padding: 1rem;">Complete Assessment</button>
+            <button type="submit" class="btn-primary test-form-btn mt-2 mb-2" style="font-size: 1.1rem; padding: 1rem;">Complete Assessment</button>
         </div>
     </form>
     

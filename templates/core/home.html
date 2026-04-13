@@ -2,19 +2,31 @@
 {% block title %}MindMappR{% endblock %}
 
 {% block content %}
+<style>
+    @media (max-width: 768px) {
+        .landing-page { gap: 3rem !important; padding: 1rem 0 !important; }
+        .hero-section { padding-top: 1.5rem !important; }
+        .hero-title { font-size: 2.2rem !important; letter-spacing: -0.5px !important; margin-bottom: 1.25rem !important; }
+        .hero-desc { font-size: 1rem !important; margin-bottom: 2rem !important; }
+        .hero-buttons { flex-direction: column !important; gap: 0.75rem !important; align-items: stretch !important; }
+        .hero-buttons a { text-align: center; font-size: 1rem !important; padding: 0.75rem 1.5rem !important; }
+        .how-it-works-card { padding: 1.5rem !important; }
+        .how-step { flex-direction: column !important; gap: 0.75rem !important; }
+    }
+</style>
 <div class="landing-page" style="display: flex; flex-direction: column; gap: 6rem; padding: 2rem 0;">
 
     <!-- HERO SECTION -->
-    <section class="text-center" style="max-width: 800px; margin: 0 auto; padding-top: 4rem;">
-        <h1 style="font-size: 4rem; letter-spacing: -1.5px; margin-bottom: 2rem; line-height: 1.1;">
+    <section class="hero-section text-center" style="max-width: 800px; margin: 0 auto; padding-top: 4rem;">
+        <h1 class="hero-title" style="font-size: 4rem; letter-spacing: -1.5px; margin-bottom: 2rem; line-height: 1.1;">
             Understand your mind,<br>
             <span style="color: var(--accent-primary);">track your wellness.</span>
         </h1>
-        <p style="font-size: 1.25rem; color: var(--text-secondary); margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+        <p class="hero-desc" style="font-size: 1.25rem; color: var(--text-secondary); margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">
             MindMappR is a simple tool designed to help you self-reflect on your mental well-being through guided questions and personalised feedback.
         </p>
         
-        <div style="display: flex; justify-content: center; gap: 1.5rem;">
+        <div class="hero-buttons" style="display: flex; justify-content: center; gap: 1.5rem;">
             <a href="{% url 'accounts:signup' %}" class="btn-primary" style="font-size: 1.1rem; padding: 0.8rem 2.5rem;">Get Started</a>
             <a href="{% url 'accounts:login' %}" class="btn-secondary" style="font-size: 1.1rem; padding: 0.8rem 2.5rem;">Login</a>
         </div>
@@ -47,24 +59,24 @@
     </section>
 
     <!-- HOW IT WORKS SECTION -->
-    <section class="saas-card" style="max-width: 800px; margin: 0 auto; width: 100%; padding: 3rem;">
+    <section class="saas-card how-it-works-card" style="max-width: 800px; margin: 0 auto; width: 100%; padding: 3rem;">
         <h2 class="text-center" style="margin-bottom: 3rem;">How It Works</h2>
         <div style="display: flex; flex-direction: column; gap: 2.5rem;">
-            <div style="display: flex; align-items: flex-start; gap: 1.5rem;">
+            <div class="how-step" style="display: flex; align-items: flex-start; gap: 1.5rem;">
                 <div style="width: 40px; height: 40px; border-radius: 8px; background: var(--surface-border); display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; color: var(--text-primary);">1</div>
                 <div>
                     <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">Answer simple questions</h3>
                     <p style="margin: 0; font-size: 1.05rem;">Log your current stress levels, hours of sleep, and overall mood metrics.</p>
                 </div>
             </div>
-            <div style="display: flex; align-items: flex-start; gap: 1.5rem;">
+            <div class="how-step" style="display: flex; align-items: flex-start; gap: 1.5rem;">
                 <div style="width: 40px; height: 40px; border-radius: 8px; background: var(--surface-border); display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; color: var(--text-primary);">2</div>
                 <div>
                     <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">Get instant feedback</h3>
                     <p style="margin: 0; font-size: 1.05rem;">Our prediction model evaluates your inputs securely in seconds.</p>
                 </div>
             </div>
-            <div style="display: flex; align-items: flex-start; gap: 1.5rem;">
+            <div class="how-step" style="display: flex; align-items: flex-start; gap: 1.5rem;">
                 <div style="width: 40px; height: 40px; border-radius: 8px; background: var(--surface-border); display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; color: var(--text-primary);">3</div>
                 <div>
                     <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">Track over time</h3>

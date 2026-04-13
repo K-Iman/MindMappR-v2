@@ -2,7 +2,14 @@
 {% block title %}MindMappR - History{% endblock %}
 
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; margin-top: 1rem;">
+<style>
+    @media (max-width: 768px) {
+        .page-header { flex-direction: column !important; align-items: flex-start !important; gap: 0.75rem !important; }
+        .history-record { flex-direction: column !important; align-items: flex-start !important; }
+        .history-stats { flex-wrap: wrap !important; gap: 0.75rem !important; }
+    }
+</style>
+<div class="page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; margin-top: 1rem;">
     <div>
         <h1 style="font-size: 2.2rem; letter-spacing: -0.5px; margin-bottom: 0.5rem;">Assessment Log</h1>
         <p style="font-size: 1.05rem; margin: 0;">Review your historical AI predictions over time.</p>
@@ -13,12 +20,12 @@
 {% if records %}
     <div style="display: flex; flex-direction: column; gap: 1rem;">
         {% for record in records %}
-            <div class="saas-card" style="padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div class="saas-card history-record" style="padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
                 <div>
                     <h3 style="margin-bottom: 0.3rem;">{{ record.result }}</h3>
                     <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">{{ record.timestamp|date:"F j, Y - H:i" }} | <strong style="color: var(--accent-primary);">{{ record.test_type }}</strong></p>
                 </div>
-                <div style="display: flex; gap: 1.5rem; color: var(--text-secondary); font-size: 0.95rem; align-items: center;">
+                <div class="history-stats" style="display: flex; gap: 1.5rem; color: var(--text-secondary); font-size: 0.95rem; align-items: center;">
                     {% if record.test_type == 'AI_Assessment' %}
                         <div><strong>Sleep:</strong> {{ record.inputs.sleep_hours }}h</div>
                         <div><strong>Stress:</strong> {{ record.inputs.stress_level }}/10</div>

@@ -113,8 +113,4 @@ body {
     box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
 
-@media (max-width: 768px) {
-    .nav-links {
-        display: none; /* Hide on extremely small layouts */
-    }
-}
+/* Mobile nav behaviour (hamburger sidebar) is handled in styles.css */

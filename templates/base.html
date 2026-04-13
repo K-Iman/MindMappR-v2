@@ -96,6 +96,50 @@
         {% endblock %}
     </main>
     
+    <footer style="margin-top: auto; border-top: 1px solid var(--surface-border); padding: 4rem 2rem 2rem; background-color: var(--bg-color);">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 3rem; justify-content: space-between;">
+            <div style="flex: 1; min-width: 250px;">
+                <a href="/" class="logo" style="margin-bottom: 1rem; display: inline-block;">Mind<span>MappR</span></a>
+                <p style="font-size: 0.95rem; max-width: 300px;">A better way to understand and track your mental well-being securely.</p>
+            </div>
+            <div style="display: flex; gap: 4rem; flex-wrap: wrap;">
+                <div>
+                    <h4 style="font-size: 1rem; margin-bottom: 1.25rem;">Platform</h4>
+                    <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.75rem;">
+                        <li><a href="{% url 'prediction:assessment' %}" style="color: var(--text-secondary); text-decoration: none; font-size: 0.95rem;">Quick Check</a></li>
+                        <li><a href="{% url 'dashboard' %}" style="color: var(--text-secondary); text-decoration: none; font-size: 0.95rem;">Dashboard</a></li>
+                        <li><a href="{% url 'resources:list' %}" style="color: var(--text-secondary); text-decoration: none; font-size: 0.95rem;">Resources</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="font-size: 1rem; margin-bottom: 1.25rem;">Legal</h4>
+                    <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.75rem;">
+                        <li><span style="color: var(--text-secondary); font-size: 0.95rem; cursor: pointer;">Privacy</span></li>
+                        <li><span style="color: var(--text-secondary); font-size: 0.95rem; cursor: pointer;">Terms</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div style="max-width: 1200px; margin: 3rem auto 0; padding-top: 2rem; border-top: 1px solid var(--surface-border); text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
+            MindMappR by Olios&trade;
+        </div>
+    </footer>
+
     <script src="{% static 'js/main.js' %}"></script>
+    <script>
+        // Set active navigation links based on current path
+        document.addEventListener("DOMContentLoaded", () => {
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.nav-link, .sidebar-nav-link');
+            
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') !== '/' && currentPath.includes(link.getAttribute('href'))) {
+                    link.classList.add('active');
+                } else if (link.getAttribute('href') === '/' && currentPath === '/') {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

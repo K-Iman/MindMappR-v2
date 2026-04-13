@@ -3,107 +3,255 @@
 
 {% block content %}
 <style>
+    /* Specialized Landing Page Styles avoiding backend changes */
+    .hero-section {
+        padding: 5rem 1rem 3rem;
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto;
+        position: relative;
+    }
+    
+    .hero-bg-glow {
+        position: absolute;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 60vw;
+        height: 60vw;
+        max-width: 800px;
+        max-height: 800px;
+        background: radial-gradient(circle, var(--accent-light) 0%, transparent 70%);
+        z-index: -1;
+        opacity: 0.6;
+        filter: blur(60px);
+        pointer-events: none;
+    }
+
+    .hero-title {
+        font-size: 4rem;
+        letter-spacing: -2px;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(180deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    [data-theme="dark"] .hero-title {
+        background: linear-gradient(180deg, #ffffff 0%, #a1a1aa 100%);
+        -webkit-background-clip: text;
+    }
+
+    .hero-desc {
+        font-size: 1.25rem;
+        color: var(--text-secondary);
+        margin: 0 auto 3rem;
+        max-width: 650px;
+        line-height: 1.6;
+    }
+
+    .hero-buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .btn-text-link {
+        color: var(--text-secondary);
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+    .btn-text-link:hover {
+        color: var(--accent-primary);
+    }
+
+    .section-spacing {
+        padding: 6rem 0;
+    }
+
+    .section-title {
+        text-align: center;
+        margin-bottom: 3.5rem;
+    }
+
+    .section-title h2 {
+        font-size: 2.25rem;
+        margin-bottom: 1rem;
+    }
+
+    .section-title p {
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .steps-container {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .step-item {
+        display: flex;
+        gap: 2rem;
+        align-items: flex-start;
+        padding: 2rem;
+        background-color: var(--bg-color);
+        border: 1px solid var(--surface-border);
+        border-radius: 16px;
+        box-shadow: var(--card-shadow);
+        transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .step-item:hover {
+        transform: translateX(10px);
+        border-color: var(--accent-light);
+    }
+
+    .step-number {
+        width: 48px;
+        height: 48px;
+        background-color: var(--surface-color);
+        border: 1px solid var(--surface-border);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        flex-shrink: 0;
+    }
+
     @media (max-width: 768px) {
-        .landing-page { gap: 3rem !important; padding: 1rem 0 !important; }
-        .hero-section { padding-top: 1.5rem !important; }
-        .hero-title { font-size: 2.2rem !important; letter-spacing: -0.5px !important; margin-bottom: 1.25rem !important; }
-        .hero-desc { font-size: 1rem !important; margin-bottom: 2rem !important; }
-        .hero-buttons { flex-direction: column !important; gap: 0.75rem !important; align-items: stretch !important; }
-        .hero-buttons a { text-align: center; font-size: 1rem !important; padding: 0.75rem 1.5rem !important; }
-        .how-it-works-card { padding: 1.5rem !important; }
-        .how-step { flex-direction: column !important; gap: 0.75rem !important; }
+        .hero-section { padding-top: 3rem; }
+        .hero-title { font-size: 2.5rem; letter-spacing: -1px; }
+        .hero-desc { font-size: 1.05rem; margin-bottom: 2rem; }
+        .hero-buttons { flex-direction: column; gap: 1rem; }
+        .hero-buttons .btn-primary { width: 100%; }
+        .step-item { flex-direction: column; gap: 1rem; padding: 1.5rem; }
+        .step-item:hover { transform: translateY(-5px); }
+        .section-spacing { padding: 4rem 0; }
     }
 </style>
-<div class="landing-page" style="display: flex; flex-direction: column; gap: 6rem; padding: 2rem 0;">
 
-    <!-- HERO SECTION -->
-    <section class="hero-section text-center" style="max-width: 800px; margin: 0 auto; padding-top: 4rem;">
-        <h1 class="hero-title" style="font-size: 4rem; letter-spacing: -1.5px; margin-bottom: 2rem; line-height: 1.1;">
-            Understand your mind,<br>
-            <span style="color: var(--accent-primary);">track your wellness.</span>
-        </h1>
-        <p class="hero-desc" style="font-size: 1.25rem; color: var(--text-secondary); margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">
-            MindMappR is a simple tool designed to help you self-reflect on your mental well-being through guided questions and personalised feedback.
+<!-- HERO SECTION -->
+<div class="hero-bg-glow"></div>
+<section class="hero-section">
+    <h1 class="hero-title">Measure, understand, and refine your mind.</h1>
+    <p class="hero-desc">
+        MindMappR provides private, guided check-ins to help you track your wellness, identify emotional trends, and build healthier daily habits.
+    </p>
+    
+    <div class="hero-buttons">
+        <a href="{% url 'accounts:signup' %}" class="btn-primary" style="font-size: 1.05rem; padding: 0.85rem 2rem;">Start Your Journey</a>
+        <a href="{% url 'accounts:login' %}" class="btn-text-link">Sign in to your account &rarr;</a>
+    </div>
+</section>
+
+<!-- WHAT IT DOES (CORE FEATURES) -->
+<section class="section-spacing">
+    <div class="section-title">
+        <h2>Features built for clarity</h2>
+        <p>Everything you need to self-reflect without the noise or clutter of traditional apps.</p>
+    </div>
+    <div class="cards-container">
+        <div class="saas-card module-card">
+            <div style="margin-bottom: 1.5rem; color: var(--accent-primary);">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            </div>
+            <h3>Intelligent Check-ins</h3>
+            <p>Log your stress, sleep, and mood metrics using a clean, scientifically-structured interface.</p>
+        </div>
+        <div class="saas-card module-card">
+            <div style="margin-bottom: 1.5rem; color: var(--accent-primary);">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            </div>
+            <h3>Trend Analysis</h3>
+            <p>Watch your historical data populate and accurately pinpoint what affects your daily mood.</p>
+        </div>
+        <div class="saas-card module-card">
+            <div style="margin-bottom: 1.5rem; color: var(--accent-primary);">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            </div>
+            <h3>Instant Feedback</h3>
+            <p>Receive immediate, actionable insights calculated securely based on your specific responses.</p>
+        </div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section-spacing">
+    <div class="section-title">
+        <h2>How MindMappR works</h2>
+        <p>A simple three-step process to better mental awareness.</p>
+    </div>
+    <div class="steps-container">
+        <div class="step-item">
+            <div class="step-number">1</div>
+            <div>
+                <h3 style="margin-bottom: 0.5rem;">Answer simple questions</h3>
+                <p style="margin: 0;">Perform a quick test logging your current stress levels, hours of sleep, and overall mood metrics. Takes less than 60 seconds.</p>
+            </div>
+        </div>
+        <div class="step-item">
+            <div class="step-number">2</div>
+            <div>
+                <h3 style="margin-bottom: 0.5rem;">Get instant feedback</h3>
+                <p style="margin: 0;">Our prediction model evaluates your inputs locally and provides immediate, non-medical feedback on your current state.</p>
+            </div>
+        </div>
+        <div class="step-item">
+            <div class="step-number">3</div>
+            <div>
+                <h3 style="margin-bottom: 0.5rem;">Track progress over time</h3>
+                <p style="margin: 0;">Review your history dashboard regularly to identify personal emotional trends and take corrective actions.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- USE CASES -->
+<section class="section-spacing">
+    <div class="section-title">
+        <span class="badge badge-accent mb-1">Who is this for?</span>
+        <h2>Built for your lifestyle</h2>
+    </div>
+    <div class="cards-container">
+        <div class="saas-card">
+            <h3>For Students</h3>
+            <p>Manage exam stress and track sleep starvation effectively during busy academic periods. Stay resilient when deadlines approach.</p>
+        </div>
+        <div class="saas-card">
+            <h3>For Professionals</h3>
+            <p>Prevent burnout by maintaining a clear view of your work-life balance and emotional state before it impacts performance.</p>
+        </div>
+        <div class="saas-card">
+            <h3>For Everyone</h3>
+            <p>A private, secure digital journal mapping your mental journey, keeping you grounded through everyday life events.</p>
+        </div>
+    </div>
+</section>
+
+<!-- BOTTOM CTA -->
+<section class="section-spacing" style="padding-bottom: 2rem;">
+    <div class="saas-card" style="text-align: center; padding: 4rem 2rem; background: linear-gradient(180deg, var(--surface-color) 0%, var(--bg-color) 100%); border-top: 1px solid var(--surface-border);">
+        <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Take control of your wellbeing today.</h2>
+        <p style="margin-bottom: 2.5rem; font-size: 1.1rem;">Join others who use MindMappR to understand their habits securely and privately.</p>
+        <a href="{% url 'accounts:signup' %}" class="btn-primary" style="font-size: 1.1rem; padding: 0.85rem 2.5rem;">Create Your Free Account</a>
+    </div>
+</section>
+
+<!-- DISCLAIMER -->
+<section class="text-center" style="max-width: 700px; margin: 0 auto 4rem;">
+    <div style="background-color: var(--danger-subtle); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.2);">
+        <p style="color: var(--danger); margin: 0; font-size: 0.95rem;">
+            <strong>Disclaimer:</strong> This tool is not a medical diagnosis matrix. It is strictly for awareness and personal self-reflection. Always seek professional help if required.
         </p>
-        
-        <div class="hero-buttons" style="display: flex; justify-content: center; gap: 1.5rem;">
-            <a href="{% url 'accounts:signup' %}" class="btn-primary" style="font-size: 1.1rem; padding: 0.8rem 2.5rem;">Get Started</a>
-            <a href="{% url 'accounts:login' %}" class="btn-secondary" style="font-size: 1.1rem; padding: 0.8rem 2.5rem;">Login</a>
-        </div>
-    </section>
-
-    <!-- WHAT IT DOES SECTION -->
-    <section style="max-width: 1000px; margin: 0 auto; width: 100%;">
-        <div class="text-center mb-2">
-            <h2>Core Features</h2>
-            <p>Everything you need for guided self-reflection.</p>
-        </div>
-        <div class="cards-container">
-            <div class="saas-card module-card text-center">
-                <h3 style="color: var(--text-primary);">Quick Check</h3>
-                <p>A fast, intuitive mental health check using scientifically backed questions.</p>
-            </div>
-            <div class="saas-card module-card text-center">
-                <h3 style="color: var(--text-primary);">Instant Feedback</h3>
-                <p>Receive immediate, actionable feedback securely based on your input.</p>
-            </div>
-            <div class="saas-card module-card text-center">
-                <h3 style="color: var(--text-primary);">History Tracking</h3>
-                <p>Review past assessments to accurately identify emotional trends over time.</p>
-            </div>
-            <div class="saas-card module-card text-center">
-                <h3 style="color: var(--text-primary);">Support Resources</h3>
-                <p>Easily access a curated repository of emergency contacts and wellness tips.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- HOW IT WORKS SECTION -->
-    <section class="saas-card how-it-works-card" style="max-width: 800px; margin: 0 auto; width: 100%; padding: 3rem;">
-        <h2 class="text-center" style="margin-bottom: 3rem;">How It Works</h2>
-        <div style="display: flex; flex-direction: column; gap: 2.5rem;">
-            <div class="how-step" style="display: flex; align-items: flex-start; gap: 1.5rem;">
-                <div style="width: 40px; height: 40px; border-radius: 8px; background: var(--surface-border); display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; color: var(--text-primary);">1</div>
-                <div>
-                    <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">Answer simple questions</h3>
-                    <p style="margin: 0; font-size: 1.05rem;">Log your current stress levels, hours of sleep, and overall mood metrics.</p>
-                </div>
-            </div>
-            <div class="how-step" style="display: flex; align-items: flex-start; gap: 1.5rem;">
-                <div style="width: 40px; height: 40px; border-radius: 8px; background: var(--surface-border); display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; color: var(--text-primary);">2</div>
-                <div>
-                    <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">Get instant feedback</h3>
-                    <p style="margin: 0; font-size: 1.05rem;">Our prediction model evaluates your inputs securely in seconds.</p>
-                </div>
-            </div>
-            <div class="how-step" style="display: flex; align-items: flex-start; gap: 1.5rem;">
-                <div style="width: 40px; height: 40px; border-radius: 8px; background: var(--surface-border); display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; color: var(--text-primary);">3</div>
-                <div>
-                    <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">Track over time</h3>
-                    <p style="margin: 0; font-size: 1.05rem;">Watch your historical data populate and identify personal emotional trends.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- WHY IT EXISTS -->
-    <section class="text-center" style="max-width: 600px; margin: 0 auto;">
-        <h2>Built for You</h2>
-        <p style="font-size: 1.1rem;">MindMappR was built to help professionals, students, and everyday individuals reflect on their mental well-being in a clean, private, and distraction-free environment.</p>
-    </section>
-
-    <!-- DISCLAIMER -->
-    <section class="text-center" style="max-width: 700px; margin: 0 auto;">
-        <div style="background-color: var(--danger-subtle); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.2);">
-            <p style="color: var(--danger); margin: 0; font-size: 0.95rem;">
-                <strong>Disclaimer:</strong> This tool is not a medical diagnosis matrix. It is strictly for awareness and personal self-reflection.
-            </p>
-        </div>
-    </section>
-
-</div>
-
-<footer class="text-center mt-2" style="padding: 2rem 0; border-top: 1px solid var(--surface-border);">
-    <p>MindMappR &copy; {% now "Y" %}</p>
-</footer>
+    </div>
+</section>
 {% endblock %}

@@ -2,6 +2,39 @@
 {% block title %}MindMappR - Dashboard{% endblock %}
 
 {% block content %}
+<!-- Lightest-weight Onboarding Banner (JS-driven purely on frontend) -->
+<div id="onboardingBanner" class="animate-fade-in" style="display: none; background: linear-gradient(135deg, var(--accent-light) 0%, var(--surface-color) 100%); border: 1px solid var(--accent-primary); border-radius: 12px; padding: 1.5rem 2rem; margin-bottom: 2.5rem; position: relative; box-shadow: var(--card-shadow); margin-top: 1rem;">
+    <button id="dismissOnboarding" style="position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.5rem; line-height: 1;" aria-label="Dismiss">&times;</button>
+    <div style="display: flex; gap: 1.5rem; align-items: center;">
+        <div style="width: 48px; height: 48px; min-width: 48px; background-color: var(--accent-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(34, 197, 94, 0.4);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        </div>
+        <div>
+            <h3 style="margin-bottom: 0.25rem; font-size: 1.15rem; color: var(--text-primary);">Take your first check-in</h3>
+            <p style="margin: 0; font-size: 0.95rem; color: var(--text-secondary);">Start your journey to better awareness by completing a 60-second baseline assessment.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const hasSeenOnboarding = localStorage.getItem('hasSeenOnboarding');
+        const onboardingBanner = document.getElementById('onboardingBanner');
+        
+        if (!hasSeenOnboarding && onboardingBanner) {
+            onboardingBanner.style.display = 'block';
+        }
+
+        const dismissBtn = document.getElementById('dismissOnboarding');
+        if (dismissBtn) {
+            dismissBtn.addEventListener('click', () => {
+                onboardingBanner.style.display = 'none';
+                localStorage.setItem('hasSeenOnboarding', 'true');
+            });
+        }
+    });
+</script>
+
 <div style="margin-bottom: 3rem; margin-top: 2rem;">
     <h1 style="font-size: 2.5rem; letter-spacing: -0.5px;">Dashboard</h1>
     <p style="font-size: 1.1rem;">Welcome back, <strong>{{ user.username }}</strong>. Here is your overview.</p>

@@ -21,6 +21,21 @@
             </p>
             <a href="{% url 'dashboard' %}" class="btn-primary">Return to Dashboard</a>
         </div>
+
+        {% if recommendations %}
+        <div class="saas-card" style="width: 100%; max-width: 650px; text-align: left; margin-top: 1.5rem; padding: 1.5rem;">
+            <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--text-primary);">Recommended Next Steps</h3>
+            <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1.25rem;">{{ recommendations.message }}</p>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                {% for rec in recommendations.resources %}
+                <a href="{{ rec.link }}" style="display: block; text-decoration: none; border-left: 3px solid var(--accent-primary); padding-left: 1rem; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+                    <strong style="color: var(--accent-primary); font-size: 1.05rem;">{{ rec.title }}</strong>
+                    <p style="margin: 0.25rem 0 0; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.4;">{{ rec.desc }}</p>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
     {% else %}
         <div class="saas-card" style="width: 100%; max-width: 550px;">
             <form method="post" action="{% url 'prediction:assessment' %}">

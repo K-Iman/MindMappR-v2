@@ -21,8 +21,8 @@ DIFFICULTY_CHOICES = [
 ]
 
 class QuickTestForm(forms.Form):
-    q1 = forms.ChoiceField(label='Little interest or pleasure in doing things', choices=FREQUENCY_CHOICES, widget=forms.RadioSelect)
-    q2 = forms.ChoiceField(label='Feeling down, depressed, or hopeless', choices=FREQUENCY_CHOICES, widget=forms.RadioSelect)
+    q1 = forms.ChoiceField(label='Over the past two weeks, how often have you felt little interest or pleasure in doing things?', choices=FREQUENCY_CHOICES, widget=forms.RadioSelect)
+    q2 = forms.ChoiceField(label='In the past two weeks, how frequently have you felt down, depressed, or without hope?', choices=FREQUENCY_CHOICES, widget=forms.RadioSelect)
     
     sleep_hours = forms.IntegerField(
         label='How many hours do you sleep on average? (0-12)',
@@ -43,18 +43,18 @@ class QuickTestForm(forms.Form):
     )
 
 class DeepTestForm(forms.Form):
-    q1 = forms.ChoiceField(label='Little interest or pleasure in doing things', choices=FREQUENCY_CHOICES, widget=forms.RadioSelect)
-    q2 = forms.ChoiceField(label='Feeling down, depressed, or hopeless', choices=FREQUENCY_CHOICES, widget=forms.RadioSelect)
-    q3 = forms.ChoiceField(label='Trouble falling/staying asleep, or sleeping too much', choices=FREQUENCY_CHOICES, widget=forms.RadioSelect)
-    q4 = forms.ChoiceField(label='Feeling tired or having little energy', choices=FREQUENCY_CHOICES, widget=forms.RadioSelect)
-    q5 = forms.ChoiceField(label='Poor appetite or overeating', choices=FREQUENCY_CHOICES, widget=forms.RadioSelect)
-    q6 = forms.ChoiceField(label='Feeling bad about yourself, or that you are a failure', choices=FREQUENCY_CHOICES, widget=forms.RadioSelect)
-    q7 = forms.ChoiceField(label='Trouble concentrating on things, such as reading the newspaper or watching television', choices=FREQUENCY_CHOICES, widget=forms.RadioSelect)
-    q8 = forms.ChoiceField(label='Moving or speaking so slowly that other people could have noticed? Or the opposite—being so fidgety or restless that you have been moving around a lot more than usual', choices=FREQUENCY_CHOICES, widget=forms.RadioSelect)
-    q9 = forms.ChoiceField(label='Thoughts that you would be better off dead or of hurting yourself in some way', choices=FREQUENCY_CHOICES, widget=forms.RadioSelect)
+    q1 = forms.ChoiceField(label='Over the past two weeks, how often have you experienced little interest or pleasure in doing things?', choices=FREQUENCY_CHOICES, widget=forms.RadioSelect)
+    q2 = forms.ChoiceField(label='In the past two weeks, how frequently have you felt down, depressed, or without hope?', choices=FREQUENCY_CHOICES, widget=forms.RadioSelect)
+    q3 = forms.ChoiceField(label='Over the last two weeks, how often have you had trouble falling asleep, staying asleep, or found yourself sleeping too much?', choices=FREQUENCY_CHOICES, widget=forms.RadioSelect)
+    q4 = forms.ChoiceField(label='During the past two weeks, how often have you felt tired or had very little energy?', choices=FREQUENCY_CHOICES, widget=forms.RadioSelect)
+    q5 = forms.ChoiceField(label='How often over the past two weeks have you experienced a poor appetite or found yourself overeating?', choices=FREQUENCY_CHOICES, widget=forms.RadioSelect)
+    q6 = forms.ChoiceField(label='In the past two weeks, how often have you felt bad about yourself, or felt that you are a failure who let yourself or your family down?', choices=FREQUENCY_CHOICES, widget=forms.RadioSelect)
+    q7 = forms.ChoiceField(label='How often have you had trouble concentrating on tasks such as reading or studying in the past two weeks?', choices=FREQUENCY_CHOICES, widget=forms.RadioSelect)
+    q8 = forms.ChoiceField(label='Over the past two weeks, how frequently have you been moving or speaking noticeably slower, or conversely, feeling unusually restless and fidgety?', choices=FREQUENCY_CHOICES, widget=forms.RadioSelect)
+    q9 = forms.ChoiceField(label='During the past two weeks, how often have you had thoughts that you would be better off dead or of hurting yourself in some way?', choices=FREQUENCY_CHOICES, widget=forms.RadioSelect)
     
     q10 = forms.ChoiceField(
-        label='How difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?',
+        label='Based on these experiences, how difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?',
         choices=DIFFICULTY_CHOICES, 
         widget=forms.RadioSelect
     )

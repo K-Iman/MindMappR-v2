@@ -8,6 +8,51 @@
         .history-record { flex-direction: column !important; align-items: flex-start !important; }
         .history-stats { flex-wrap: wrap !important; gap: 0.75rem !important; }
     }
+
+    /* Severe / High Risk */
+    .status-severe {
+        border: 1px solid rgba(239, 68, 68, 0.4) !important;
+        background-color: rgba(239, 68, 68, 0.05) !important;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease !important;
+    }
+    .status-severe:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 14px rgba(239, 68, 68, 0.15) !important;
+        background-color: rgba(239, 68, 68, 0.08) !important;
+    }
+    .status-severe .result-title {
+        color: #ef4444 !important;
+    }
+
+    /* Moderate */
+    .status-moderate {
+        border: 1px solid rgba(245, 158, 11, 0.4) !important;
+        background-color: rgba(245, 158, 11, 0.05) !important;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease !important;
+    }
+    .status-moderate:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 14px rgba(245, 158, 11, 0.15) !important;
+        background-color: rgba(245, 158, 11, 0.08) !important;
+    }
+    .status-moderate .result-title {
+        color: #f59e0b !important;
+    }
+
+    /* Good / Normal */
+    .status-good {
+        border: 1px solid rgba(16, 185, 129, 0.4) !important;
+        background-color: rgba(16, 185, 129, 0.05) !important;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease !important;
+    }
+    .status-good:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 14px rgba(16, 185, 129, 0.15) !important;
+        background-color: rgba(16, 185, 129, 0.08) !important;
+    }
+    .status-good .result-title {
+        color: #10b981 !important;
+    }
 </style>
 <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; margin-top: 1rem;">
     <div>
@@ -20,9 +65,13 @@
 {% if records %}
     <div style="display: flex; flex-direction: column; gap: 1rem;">
         {% for record in records %}
-            <div class="saas-card history-record" style="padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div class="saas-card history-record 
+                {% if 'High' in record.result or 'Sever' in record.result %}status-severe
+                {% elif 'Moderate' in record.result %}status-moderate
+                {% else %}status-good{% endif %}" 
+                style="padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
                 <div>
-                    <h3 style="margin-bottom: 0.3rem;">{{ record.result }}</h3>
+                    <h3 class="result-title" style="margin-bottom: 0.3rem;">{{ record.result }}</h3>
                     <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">{{ record.timestamp|date:"F j, Y - H:i" }} | <strong style="color: var(--accent-primary);">{{ record.test_type }}</strong></p>
                 </div>
                 <div class="history-stats" style="display: flex; gap: 1.5rem; color: var(--text-secondary); font-size: 0.95rem; align-items: center;">

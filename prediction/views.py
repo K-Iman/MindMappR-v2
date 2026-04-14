@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import AssessmentForm, QuickTestForm, DeepTestForm
-from .utils import predict_risk
+from .utils import predict_risk, get_user_recommendations
 from .models import PredictionRecord
 import json
 
@@ -26,7 +26,9 @@ def take_assessment(request):
             )
     else:
         form = AssessmentForm()
-    return render(request, 'prediction/assessment.html', {'form': form, 'result': result})
+    
+    recommendations = get_user_recommendations(request.user)
+    return render(request, 'prediction/assessment.html', {'form': form, 'result': result, 'recommendations': recommendations})
 
 @login_required
 def quick_test(request):
@@ -71,7 +73,9 @@ def quick_test(request):
                 form.add_error(None, f"Internal Error: Failed to successfully evaluate matrix due to invalid inputs.")
     else:
         form = QuickTestForm()
-    return render(request, 'prediction/quick_test.html', {'form': form, 'result': result})
+        
+    recommendations = get_user_recommendations(request.user)
+    return render(request, 'prediction/quick_test.html', {'form': form, 'result': result, 'recommendations': recommendations})
 
 def determine_quick_risk(score):
     if score <= 2: return "Low risk"
@@ -82,16 +86,19 @@ def determine_quick_risk(score):
 def user_progress_view(request):
     records = PredictionRecord.objects.filter(
         user=request.user,
-        test_type='Quick Test'
+        test_type__in=['Quick Test', 'Deep Test']
     ).exclude(score__isnull=True).order_by('timestamp')
 
-    # Parse specifically into explicit variables without trailing null arrays bridging outputs safely
-    dates = [r.timestamp.strftime('%b %d') for r in records]
-    scores = [r.score for r in records]
+    all_data = []
+    for r in records:
+        all_data.append({
+            'date': r.timestamp.strftime('%b %d'),
+            'type': r.test_type,
+            'score': r.score
+        })
 
     context = {
-        'dates': json.dumps(dates),
-        'scores': json.dumps(scores),
+        'all_data': json.dumps(all_data),
         'has_data': len(records) > 0
     }
     
@@ -119,7 +126,9 @@ def deep_test(request):
             result = {'score': score, 'severity': severity, 'q9_high': int(form.cleaned_data['q9']) > 0}
     else:
         form = DeepTestForm()
-    return render(request, 'prediction/deep_test.html', {'form': form, 'result': result})
+        
+    recommendations = get_user_recommendations(request.user)
+    return render(request, 'prediction/deep_test.html', {'form': form, 'result': result, 'recommendations': recommendations})
 
 def determine_deep_severity(score):
     if score <= 4: return "Minimal"

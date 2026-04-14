@@ -25,8 +25,7 @@ SECRET_KEY = os.environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 ENVIRONMENT = os.environ.get('ENVIRONMENT', 'development')
 
-DEBUG = os.environ.get('ENVIRONMENT', 'development') != 'production'
-
+DEBUG = ENVIRONMENT == 'development'
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com']
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
@@ -80,20 +79,21 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-if os.environ.get('ENVIRONMENT') == 'production':
+# DEFAULT = SQLITE (safe fallback)
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+# ONLY override if production + DATABASE_URL exists
+if ENVIRONMENT == 'production' and os.environ.get('DATABASE_URL'):
     DATABASES = {
         'default': dj_database_url.config(
-            default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
             conn_max_age=600,
             conn_health_checks=True,
         )
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
     }
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [

@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% block title %}MindMappR - Zen{% endblock %}
+
+{% block content %}
+<style>
+    @media (max-width: 768px) {
+        .test-form-btn { width: 100% !important; }
+        .log-grid { grid-template-columns: 1fr !important; }
+    }
+</style>
+
+<div style="margin-bottom: 2rem; margin-top: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2.2rem; letter-spacing: -0.5px;">Zen</h1>
+        <p style="font-size: 1.05rem; max-width: 650px;">Log how you're feeling right now to build a clear timeline of your emotional patterns.</p>
+    </div>
+    <a href="{% url 'dashboard' %}" class="btn-secondary">Dashboard</a>
+</div>
+
+<div class="log-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;">
+    
+    <!-- Submission Form -->
+    <div class="saas-card" style="padding: 2rem;">
+        <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);">New Entry</h2>
+        <form method="post" action="{% url 'zen' %}">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+                <div style="color: var(--danger); background: var(--danger-subtle); padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            {% for field in form %}
+                <div style="margin-bottom: 1.8rem;">
+                    <label style="font-weight: 600; font-size: 1.05rem; color: var(--text-primary); margin-bottom: 0.8rem; display: block;">{{ field.label }}</label>
+                    
+                    {% if field.name == 'current_mood' %}
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.8rem;">
+                            {% for radio in field %}
+                                <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; padding: 0.6rem 1rem; border: 1px solid var(--surface-border); border-radius: 8px; transition: all 0.2s ease;">
+                                    {{ radio.tag }}
+                                    <span style="font-size: 0.95rem; color: var(--text-secondary);">{{ radio.choice_label }}</span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ field }}
+                    {% endif %}
+                    
+                    {% if field.errors %}
+                        <div style="color: var(--danger); font-size: 0.9rem; margin-top: 0.5rem;">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            
+            <button type="submit" class="btn-primary test-form-btn" style="padding: 1rem 1.5rem; font-size: 1.05rem;">Save Entry</button>
+        </form>
+    </div>
+
+    <!-- History Log -->
+    <div>
+        <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);">Past Logs</h2>
+        
+        {% if past_logs %}
+            <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+                {% for log in past_logs %}
+                    <div class="saas-card log-entry" style="padding: 1.5rem; border-left: 4px solid var(--accent-primary);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="font-weight: 600; color: var(--text-primary); font-size: 1.1rem;">{{ log.current_mood }}</span>
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">{{ log.created_at|date:"M d, Y - g:i a" }}</span>
+                        </div>
+                        
+                        <!-- Snippet View -->
+                        <div class="log-preview" style="display: block;">
+                            <p style="font-size: 0.95rem; color: var(--text-secondary); margin: 0;">
+                                {% if log.extra_concerns %}{{ log.extra_concerns|truncatewords:8 }}{% elif log.feeling_description %}{{ log.feeling_description|truncatewords:8 }}{% elif log.notes %}{{ log.notes|truncatewords:8 }}{% else %}<em>No extra notes.</em>{% endif %}
+                            </p>
+                            {% if log.extra_concerns or log.feeling_description or log.notes %}
+                            <button class="expand-btn" style="background: none; border: none; color: var(--accent-primary); font-size: 0.85rem; font-weight: 600; cursor: pointer; padding: 0; margin-top: 0.5rem;">Read more &darr;</button>
+                            {% endif %}
+                        </div>
+
+                        <!-- Expanded View -->
+                        <div class="log-expanded" style="display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--surface-border);">
+                            {% if log.extra_concerns %}
+                                <div style="margin-bottom: 0.8rem;">
+                                    <strong style="font-size: 0.9rem; color: var(--text-primary);">Concerns:</strong>
+                                    <p style="font-size: 0.95rem; color: var(--text-secondary); margin: 0.2rem 0 0;">{{ log.extra_concerns }}</p>
+                                </div>
+                            {% endif %}
+                            {% if log.feeling_description %}
+                                <div style="margin-bottom: 0.8rem;">
+                                    <strong style="font-size: 0.9rem; color: var(--text-primary);">Description:</strong>
+                                    <p style="font-size: 0.95rem; color: var(--text-secondary); margin: 0.2rem 0 0;">{{ log.feeling_description }}</p>
+                                </div>
+                            {% endif %}
+                            {% if log.notes %}
+                                <div style="margin-bottom: 0.8rem;">
+                                    <strong style="font-size: 0.9rem; color: var(--text-primary);">Notes:</strong>
+                                    <p style="font-size: 0.95rem; color: var(--text-secondary); margin: 0.2rem 0 0;">{{ log.notes }}</p>
+                                </div>
+                            {% endif %}
+                            <button class="collapse-btn" style="background: none; border: none; color: var(--accent-primary); font-size: 0.85rem; font-weight: 600; cursor: pointer; padding: 0; margin-top: 0.5rem;">Show less &uarr;</button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="saas-card" style="padding: 2rem; text-align: center;">
+                <p style="color: var(--text-secondary); margin: 0;">You haven't tracked your mood yet. Submit your first entry on the left.</p>
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<script>
+    // Radio interaction styling
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const groupName = this.name;
+            document.querySelectorAll(`input[name="${groupName}"]`).forEach(r => {
+                r.closest('label').style.borderColor = r.checked ? 'var(--accent-primary)' : 'var(--surface-border)';
+                r.closest('label').style.backgroundColor = r.checked ? 'var(--surface-color)' : 'transparent';
+            });
+        });
+    });
+
+    // Expand / Collapse functionality
+    document.querySelectorAll('.expand-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const entry = this.closest('.log-entry');
+            entry.querySelector('.log-preview').style.display = 'none';
+            entry.querySelector('.log-expanded').style.display = 'block';
+        });
+    });
+
+    document.querySelectorAll('.collapse-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const entry = this.closest('.log-entry');
+            entry.querySelector('.log-preview').style.display = 'block';
+            entry.querySelector('.log-expanded').style.display = 'none';
+        });
+    });
+</script>
+{% endblock %}

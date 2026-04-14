@@ -17,54 +17,190 @@
 
 {% if has_data %}
 <div class="saas-card" style="width: 100%; max-width: 900px; padding: 2rem;">
+    <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <label for="testTypeSelector" style="font-weight: 600; color: var(--text-primary);">Select Test Type:</label>
+                <select id="testTypeSelector" style="padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid var(--surface-border); background-color: var(--surface-default); color: var(--text-primary); cursor: pointer; font-family: inherit; font-size: 0.95rem;">
+                    <option value="Quick Test" selected>Quick Test</option>
+                    <option value="Deep Test">Deep Test</option>
+                </select>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <label for="recordSetSelector" style="font-weight: 600; color: var(--text-primary);">View Past Records:</label>
+                <select id="recordSetSelector" style="padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid var(--surface-border); background-color: var(--surface-default); color: var(--text-primary); cursor: pointer; font-family: inherit; font-size: 0.95rem;">
+                    <!-- Dynamically populated -->
+                </select>
+            </div>
+        </div>
+        <div id="trendInsight" style="font-weight: 500; font-size: 0.95rem; padding: 0.5rem 1rem; border-radius: 6px; background-color: var(--surface-hover); border: 1px solid var(--surface-border); color: var(--text-primary);">
+            Analyzing trend...
+        </div>
+    </div>
+
+    <div id="graphFallback" style="display: none; padding: 4rem 2rem; text-align: center; color: var(--text-secondary); font-size: 1.1rem;">
+        No records available for this test type.
+    </div>
     <canvas id="progressChart" width="400" height="200"></canvas>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const dates = JSON.parse('{{ dates|safe }}');
-    const scores = JSON.parse('{{ scores|safe }}');
-    
+    const allData = JSON.parse('{{ all_data|safe }}');
     Chart.defaults.color = '#888';
     
     const ctx = document.getElementById('progressChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: dates,
-            datasets: [{
-                label: 'PHQ-2 Total Score',
-                data: scores,
-                borderColor: '#22c55e',
-                backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                borderWidth: 3,
-                pointBackgroundColor: '#22c55e',
-                pointRadius: 5,
-                fill: true,
-                tension: 0.3
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 6,
-                    ticks: { stepSize: 1 },
-                    grid: { color: 'rgba(150, 150, 150, 0.1)' }
+    let progressChart;
+
+    const testTypeSelector = document.getElementById('testTypeSelector');
+    const selector = document.getElementById('recordSetSelector');
+    const insightEl = document.getElementById('trendInsight');
+    const fallbackEl = document.getElementById('graphFallback');
+    const canvasEl = document.getElementById('progressChart');
+
+    const chunkSize = 4;
+    let currentChunks = [];
+
+    function buildChunks(testType) {
+        const typeData = allData.filter(d => d.type === testType);
+        const chunks = [];
+        const total = typeData.length;
+
+        for (let i = total; i > 0; i -= chunkSize) {
+            let start = Math.max(0, i - chunkSize);
+            let end = i;
+            let slice = typeData.slice(start, end);
+            
+            let label = chunks.length === 0 ? "Latest" : `Previous (${slice[0].date} to ${slice[slice.length - 1].date})`;
+            
+            chunks.push({
+                dates: slice.map(d => d.date),
+                scores: slice.map(d => d.score),
+                label: label
+            });
+        }
+        return chunks;
+    }
+
+    function renderSelectorDropdown(chunks) {
+        selector.innerHTML = '';
+        if (chunks.length === 0) {
+            selector.disabled = true;
+            return;
+        }
+        selector.disabled = false;
+        chunks.forEach((chunk, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = chunk.label;
+            selector.appendChild(option);
+        });
+    }
+
+    function updateView(chunkIndex) {
+        const testType = testTypeSelector.value;
+
+        if (currentChunks.length === 0) {
+            fallbackEl.style.display = 'block';
+            fallbackEl.textContent = `No records available for ${testType}.`;
+            canvasEl.style.display = 'none';
+            insightEl.textContent = "No data available";
+            insightEl.style.color = "var(--text-secondary)";
+            return;
+        }
+        
+        fallbackEl.style.display = 'none';
+        canvasEl.style.display = 'block';
+
+        const chunk = currentChunks[chunkIndex];
+
+        const datasetConfig = {
+            label: testType,
+            data: chunk.scores,
+            borderWidth: 3,
+            pointRadius: 5,
+            fill: true,
+            tension: 0.3
+        };
+
+        if (testType === 'Quick Test') {
+            datasetConfig.borderColor = '#22c55e';
+            datasetConfig.backgroundColor = 'rgba(34, 197, 94, 0.1)';
+            datasetConfig.pointBackgroundColor = '#22c55e';
+        } else {
+            datasetConfig.borderColor = '#3b82f6';
+            datasetConfig.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+            datasetConfig.pointBackgroundColor = '#3b82f6';
+        }
+
+        if (progressChart) {
+            progressChart.data.labels = chunk.dates;
+            progressChart.data.datasets = [datasetConfig];
+            progressChart.update();
+        } else {
+            progressChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chunk.dates,
+                    datasets: [datasetConfig]
                 },
-                x: {
-                    grid: { display: false }
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 },
+                            grid: { color: 'rgba(150, 150, 150, 0.1)' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: { font: { size: 14 } }
+                        }
+                    }
                 }
-            },
-            plugins: {
-                legend: {
-                    labels: { font: { size: 14 } }
-                }
+            });
+        }
+
+        if (chunk.scores.length < 2) {
+            insightEl.textContent = "Not enough data yet";
+            insightEl.style.color = "var(--text-secondary)";
+        } else {
+            const firstScore = chunk.scores[0];
+            const lastScore = chunk.scores[chunk.scores.length - 1];
+            if (lastScore < firstScore) {
+                insightEl.textContent = "You are improving";
+                insightEl.style.color = "#22c55e";
+            } else if (lastScore > firstScore) {
+                insightEl.textContent = "Your condition may be worsening";
+                insightEl.style.color = "#ef4444";
+            } else {
+                insightEl.textContent = "Your condition appears stable";
+                insightEl.style.color = "var(--text-primary)";
             }
         }
+    }
+
+    function switchType() {
+        const type = testTypeSelector.value;
+        currentChunks = buildChunks(type);
+        renderSelectorDropdown(currentChunks);
+        updateView(0);
+    }
+
+    testTypeSelector.addEventListener('change', switchType);
+
+    selector.addEventListener('change', (e) => {
+        updateView(parseInt(e.target.value));
     });
+
+    switchType();
 });
 </script>
 {% else %}

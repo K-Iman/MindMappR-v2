@@ -77,7 +77,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-# If DATABASE_URL is set (e.g. in Production / Render), use dj_database_url
 if os.environ.get('DATABASE_URL'):
     DATABASES = {
         'default': dj_database_url.config(
@@ -86,7 +85,6 @@ if os.environ.get('DATABASE_URL'):
         )
     }
 else:
-    # Native PostgreSQL local setup (configured via environment variables or sane defaults)
     DATABASES = {
         'default': {
             'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.postgresql'),
@@ -97,15 +95,6 @@ else:
             'PORT': os.environ.get('DB_PORT', '5432'),
         }
     }
-
-# Commented SQLite fallback for reference:
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {

@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block title %}MindMappR - Deep Test{% endblock %}
+
+{% block content %}
+<style>
+    @media (max-width: 768px) {
+        .test-form-btn { width: 100% !important; }
+    }
+</style>
+<div style="margin-bottom: 2rem; margin-top: 1rem;">
+    <h1 style="font-size: 2.2rem; letter-spacing: -0.5px;">Deep Test</h1>
+    <p style="font-size: 1.05rem; max-width: 650px;">Over the last 2 weeks, how often have you been bothered by the following problems?</p>
+</div>
+
+{% if result %}
+    <div class="saas-card" style="width: 100%; max-width: 650px; text-align: center; border-color: var(--accent-primary);">
+        <h2 style="color: var(--text-primary); margin-bottom: 0.5rem;">Assessment Result</h2>
+        <div style="font-size: 1.2rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 1rem;">Severity Score: {{ result.score }}/27</div>
+        
+        <div style="font-size: 2rem; font-weight: 800; margin-bottom: 1.5rem; color: {% if result.severity == 'Severe' or result.severity == 'Moderately severe' %}var(--danger){% else %}var(--accent-primary){% endif %};">{{ result.severity }}</div>
+        
+        <div style="background-color: var(--surface-default); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid var(--surface-border);">
+            <p style="font-size: 1.1rem; line-height: 1.6; margin: 0; color: var(--text-primary);">
+                {% if result.score is None %}
+                    There is not enough data yet to provide a full assessment. Continue using the test to build a clearer picture over time.
+                {% elif result.score <= 4 %}
+                    You are currently at a low risk of depression based on your responses. Continue maintaining healthy habits and monitor your well-being over time.
+                {% elif result.score <= 9 %}
+                    Your responses suggest mild symptoms of depression. It may be helpful to monitor how you feel and take small steps to support your mental well-being.
+                {% elif result.score <= 14 %}
+                    Your responses indicate a moderate level of depressive symptoms. Paying closer attention to your mental health and exploring supportive strategies may be beneficial.
+                {% elif result.score <= 19 %}
+                    Your responses suggest moderately severe depressive symptoms. It may be important to seek additional support and consider speaking with a qualified professional.
+                {% else %}
+                    Your responses indicate a high level of depressive symptoms. Seeking support from a qualified professional is strongly recommended.
+                {% endif %}
+            </p>
+        </div>
+        
+        <a href="{% url 'dashboard' %}" class="btn-primary">Return to Dashboard</a>
+    </div>
+
+    {% if recommendations %}
+    <div class="saas-card" style="width: 100%; max-width: 650px; text-align: left; margin-top: 1.5rem; padding: 1.5rem;">
+        <p style="font-size: 1.05rem; color: var(--text-primary); font-weight: 500; margin-bottom: 1.25rem;">Based on your recent patterns, the following resources may be helpful:</p>
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+            {% for rec in recommendations.resources %}
+            <a href="{{ rec.link }}" style="display: block; text-decoration: none; border-left: 3px solid var(--accent-primary); padding-left: 1rem; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+                <strong style="color: var(--accent-primary); font-size: 1.05rem;">{{ rec.title }}</strong>
+                <p style="margin: 0.25rem 0 0; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.4;">{{ rec.desc }}</p>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+{% else %}
+    <form method="post" action="{% url 'prediction:deep_test' %}">
+        {% csrf_token %}
+        <div style="display: flex; flex-direction: column; gap: 1.5rem; max-width: 800px;">
+            {% for field in form %}
+                <div class="saas-card" style="padding: 1.8rem; border-left: 4px solid var(--accent-primary);">
+                    <p style="font-weight: 600; font-size: 1.15rem; color: var(--text-primary); margin-bottom: 1.2rem;">{{ field.label }}</p>
+                    <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                        {% for radio in field %}
+                            <label style="display: flex; align-items: center; gap: 0.8rem; cursor: pointer; padding: 0.8rem; border: 1px solid var(--surface-border); border-radius: 8px; transition: all 0.2s ease;">
+                                {{ radio.tag }}
+                                <span style="font-size: 1rem; color: var(--text-secondary);">{{ radio.choice_label }}</span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn-primary test-form-btn mt-2 mb-2" style="font-size: 1.1rem; padding: 1rem;">Complete Assessment</button>
+        </div>
+    </form>
+    
+    <script>
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const groupName = this.name;
+                document.querySelectorAll(`input[name="${groupName}"]`).forEach(r => {
+                    r.closest('label').style.borderColor = r.checked ? 'var(--accent-primary)' : 'var(--surface-border)';
+                    r.closest('label').style.backgroundColor = r.checked ? 'var(--surface-color)' : 'transparent';
+                });
+            });
+        });
+    </script>
+{% endif %}
+{% endblock %}
